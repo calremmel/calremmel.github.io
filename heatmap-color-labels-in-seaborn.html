@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+          <title>Chris Remmel</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta charset="utf-8" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Chris Remmel Full Atom Feed" />
+        <link href="/feeds/dataviz.atom.xml" type="application/atom+xml" rel="alternate" title="Chris Remmel Categories Atom Feed" />
+        <!-- twitter card metadata -->
+<meta name="twitter:site" content="">
+<meta name="twitter:title" content="Heatmap Color Labels in Seaborn">
+<meta name="twitter:description" content="">
+        <!-- OG Tags -->
+<meta property="og:url" content="/heatmap-color-labels-in-seaborn.html"/>
+<meta property="og:title" content="Chris Remmel | Heatmap Color Labels in Seaborn" />
+<meta property="og:description" content="" />
+        <!-- favicon -->
+        <!-- moment.js for date formatting -->
+        <script src="/theme/js/moment.js"></script>
+        <!-- css -->
+        <link rel="stylesheet" type="text/css" href="/theme/css/main.css" />
+		<script>
+			
+                /*! grunt-grunticon Stylesheet Loader - v2.1.2 | https://github.com/filamentgroup/grunticon | (c) 2015 Scott Jehl, Filament Group, Inc. | MIT license. */
+    
+    (function(e){function t(t,n,r,o){"use strict";function a(){for(var e,n=0;u.length>n;n++)u[n].href&&u[n].href.indexOf(t)>-1&&(e=!0);e?i.media=r||"all":setTimeout(a)}var i=e.document.createElement("link"),l=n||e.document.getElementsByTagName("script")[0],u=e.document.styleSheets;return i.rel="stylesheet",i.href=t,i.media="only x",i.onload=o||null,l.parentNode.insertBefore(i,l),a(),i}var n=function(r,o){"use strict";if(r&&3===r.length){var a=e.navigator,i=e.Image,l=!(!document.createElementNS||!document.createElementNS("http://www.w3.org/2000/svg","svg").createSVGRect||!document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#Image","1.1")||e.opera&&-1===a.userAgent.indexOf("Chrome")||-1!==a.userAgent.indexOf("Series40")),u=new i;u.onerror=function(){n.method="png",n.href=r[2],t(r[2])},u.onload=function(){var e=1===u.width&&1===u.height,a=r[e&&l?0:e?1:2];n.method=e&&l?"svg":e?"datapng":"png",n.href=a,t(a,null,null,o)},u.src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==",document.documentElement.className+=" grunticon"}};n.loadCSS=t,e.grunticon=n})(this);(function(e,t){"use strict";var n=t.document,r="grunticon:",o=function(e){if(n.attachEvent?"complete"===n.readyState:"loading"!==n.readyState)e();else{var t=!1;n.addEventListener("readystatechange",function(){t||(t=!0,e())},!1)}},a=function(e){return t.document.querySelector('link[href$="'+e+'"]')},c=function(e){var t,n,o,a,c,i,u={};if(t=e.sheet,!t)return u;n=t.cssRules?t.cssRules:t.rules;for(var l=0;n.length>l;l++)o=n[l].cssText,a=r+n[l].selectorText,c=o.split(");")[0].match(/US\-ASCII\,([^"']+)/),c&&c[1]&&(i=decodeURIComponent(c[1]),u[a]=i);return u},i=function(e){var t,o,a;o="data-grunticon-embed";for(var c in e)if(a=c.slice(r.length),t=n.querySelectorAll(a+"["+o+"]"),t.length)for(var i=0;t.length>i;i++)t[i].innerHTML=e[c],t[i].style.backgroundImage="none",t[i].removeAttribute(o);return t},u=function(t){"svg"===e.method&&o(function(){i(c(a(e.href))),"function"==typeof t&&t()})};e.embedIcons=i,e.getCSS=a,e.getIcons=c,e.ready=o,e.svgLoadedCallback=u,e.embedSVG=u})(grunticon,this);
+                
+                grunticon(["/theme/css/icons.data.svg.css", "/theme/css/icons.data.png.css", "/theme/css/icons.fallback.css"]);
+            </script>
+        <noscript><link href="/theme/css/icons.fallback.css" rel="stylesheet"></noscript>
+        <!-- menu toggle javascript -->
+        <script type="text/javascript">
+            document.addEventListener("DOMContentLoaded", initMenu);
+            
+            function initMenu(){
+                var menu = document.getElementById("menu");
+                var menulink = document.getElementById("menu-link");
+                menulink.addEventListener("click", function toggleMenu(){
+                        window.event.preventDefault();
+                        menulink.classList.toggle('active');
+                        menu.classList.toggle('active');              
+                    });
+            };
+        </script>
+
+
+
+</head>
+<body>
+    <div role="banner" id="masthead">
+        <header>
+            <h1><a href="/">'s Blog</a></h1>
+            <a href="#menu" id="menu-link">more stuff</a>
+            <nav id="menu">
+                <ul>
+                            <li class="active"><a href="/category/dataviz.html">dataviz</a></li>
+                </ul>
+            </nav>
+        </header>
+    </div>
+        <div class="page" role="main">
+  <div class="article" role="article">
+    <article>
+        <footer>
+            <a name="top"></a>
+            <p>
+              <time datetime=" 2019-04-05 00:00:00-04:00">
+                <script>document.write(moment('2019-04-05 00:00:00-04:00').format('LL'));</script>
+              </time>
+            </p>
+        </footer>
+        <header>
+          <h2>
+            Heatmap Color Labels in Seaborn
+          </h2>
+        </header>
+      <div class="content">
+         <h1>Multiple Layers of Color Labels in Seaborn Heatmaps</h1>
+<p>I'm currently working with biological test data, which by its nature tends to have a large number of features. This presents all sorts of challenges, not least of which is the difficulty in interpreting correlation heatmaps when there are so many rows and columns that the labels become impossible to read!</p>
+<p>One solution to this problem is to group the features into categories, assign each category a color, and annotate the rows and columns of a heatmap. For a toy example of this using a more manageable non-biological dataset, consider the following:</p>
+<p><img alt="Heatmap One" src="/images/heatmap_one.png"></p>
+<p>This is a nice way to interpret the correlation heatmap of a large dataset, as the column and row colors allow you to identify useful clusters by sight. What if, however, each feature has not just one useful attribute for grouping, but two? For those working in life sciences, you might take the example of wanting to be able to know both reagent and antigen by sight.</p>
+<p>Fortunately, seaborn makes this easy as well. Let's work through an example using the Residential Building Data Set from the UCI Machine Learning Library.</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="kn">as</span> <span class="nn">sns</span>
+
+<span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+</pre></div>
+
+
+<div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;data/raw/Residential-Building-Data-Set.xlsx&#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>PROJECT DATES (PERSIAN CALENDAR)</th>
+      <th>Unnamed: 1</th>
+      <th>Unnamed: 2</th>
+      <th>Unnamed: 3</th>
+      <th>PROJECT PHYSICAL AND FINANCIAL VARIABLES</th>
+      <th>Unnamed: 5</th>
+      <th>Unnamed: 6</th>
+      <th>Unnamed: 7</th>
+      <th>Unnamed: 8</th>
+      <th>Unnamed: 9</th>
+      <th>...</th>
+      <th>Unnamed: 99</th>
+      <th>Unnamed: 100</th>
+      <th>Unnamed: 101</th>
+      <th>Unnamed: 102</th>
+      <th>Unnamed: 103</th>
+      <th>Unnamed: 104</th>
+      <th>Unnamed: 105</th>
+      <th>Unnamed: 106</th>
+      <th>OUTPUTS</th>
+      <th>Unnamed: 108</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>START YEAR</td>
+      <td>START QUARTER</td>
+      <td>COMPLETION YEAR</td>
+      <td>COMPLETION QUARTER</td>
+      <td>V-1</td>
+      <td>V-2</td>
+      <td>V-3</td>
+      <td>V-4</td>
+      <td>V-5</td>
+      <td>V-6</td>
+      <td>...</td>
+      <td>V-22</td>
+      <td>V-23</td>
+      <td>V-24</td>
+      <td>V-25</td>
+      <td>V-26</td>
+      <td>V-27</td>
+      <td>V-28</td>
+      <td>V-29</td>
+      <td>V-9</td>
+      <td>V-10</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>81</td>
+      <td>1</td>
+      <td>85</td>
+      <td>1</td>
+      <td>1</td>
+      <td>3150</td>
+      <td>920</td>
+      <td>598.5</td>
+      <td>190</td>
+      <td>1010.84</td>
+      <td>...</td>
+      <td>815.5</td>
+      <td>1755</td>
+      <td>8002</td>
+      <td>60.74</td>
+      <td>54.26</td>
+      <td>2978.26</td>
+      <td>41407</td>
+      <td>601988</td>
+      <td>2200</td>
+      <td>410</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>84</td>
+      <td>1</td>
+      <td>89</td>
+      <td>4</td>
+      <td>1</td>
+      <td>7600</td>
+      <td>1140</td>
+      <td>3040</td>
+      <td>400</td>
+      <td>963.81</td>
+      <td>...</td>
+      <td>1316.3</td>
+      <td>8364.78</td>
+      <td>8393</td>
+      <td>90.95</td>
+      <td>89.79</td>
+      <td>11379.4</td>
+      <td>44835</td>
+      <td>929027</td>
+      <td>5000</td>
+      <td>1000</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>78</td>
+      <td>1</td>
+      <td>81</td>
+      <td>4</td>
+      <td>1</td>
+      <td>4800</td>
+      <td>840</td>
+      <td>480</td>
+      <td>100</td>
+      <td>689.84</td>
+      <td>...</td>
+      <td>765.8</td>
+      <td>1755</td>
+      <td>4930</td>
+      <td>38.7</td>
+      <td>32.04</td>
+      <td>1653.06</td>
+      <td>37933</td>
+      <td>377829</td>
+      <td>1200</td>
+      <td>170</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>72</td>
+      <td>2</td>
+      <td>73</td>
+      <td>2</td>
+      <td>1</td>
+      <td>685</td>
+      <td>202</td>
+      <td>13.7</td>
+      <td>20</td>
+      <td>459.54</td>
+      <td>...</td>
+      <td>152.25</td>
+      <td>1442.31</td>
+      <td>1456</td>
+      <td>9.73</td>
+      <td>8.34</td>
+      <td>686.16</td>
+      <td>8194</td>
+      <td>122032</td>
+      <td>165</td>
+      <td>30</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 109 columns</p>
+</div>
+
+<p>This dataset contains measurements relating to real estate construction projects in Iran. Broadly speaking, these measurements can be grouped into <strong>physical and financial (P&amp;F)</strong> measurements which were recorded once, and <strong>economic (E)</strong> measurements which were recorded at five time points throughout the contruction project. For more information on the features, you may check out the data dictionary here:</p>
+<p>First, we'll clean the data so that it contains only the P&amp;F measurements and the E measurements at the final timepoint, converted into the appropriate data type.</p>
+<div class="highlight"><pre><span></span><span class="c1"># Use the first row as the columns</span>
+<span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span>
+<span class="c1"># Select only the P&amp;F features, and the E features for one timepoint</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">4</span><span class="p">:</span><span class="mi">12</span><span class="p">],</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">21</span><span class="p">:]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># Reorder the columns so that they are in ascending numerical order</span>
+<span class="n">col_order</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;V-&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">30</span><span class="p">)]</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">col_order</span><span class="p">]</span>
+<span class="c1"># Drop the extra row of column names and reset the index numbering</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="c1"># Convert the DataFrame to numeric</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+
+<div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>V-1</th>
+      <th>V-2</th>
+      <th>V-3</th>
+      <th>V-4</th>
+      <th>V-5</th>
+      <th>V-6</th>
+      <th>V-7</th>
+      <th>V-8</th>
+      <th>V-9</th>
+      <th>V-10</th>
+      <th>...</th>
+      <th>V-20</th>
+      <th>V-21</th>
+      <th>V-22</th>
+      <th>V-23</th>
+      <th>V-24</th>
+      <th>V-25</th>
+      <th>V-26</th>
+      <th>V-27</th>
+      <th>V-28</th>
+      <th>V-29</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1.0</td>
+      <td>3150.0</td>
+      <td>920.0</td>
+      <td>598.5</td>
+      <td>190.0</td>
+      <td>1010.84</td>
+      <td>16.0</td>
+      <td>1200.0</td>
+      <td>2200.0</td>
+      <td>410.0</td>
+      <td>...</td>
+      <td>15.0</td>
+      <td>733.800000</td>
+      <td>815.50</td>
+      <td>1755.00</td>
+      <td>8002.0</td>
+      <td>60.74</td>
+      <td>54.26</td>
+      <td>2978.26</td>
+      <td>41407.0</td>
+      <td>601988.1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1.0</td>
+      <td>7600.0</td>
+      <td>1140.0</td>
+      <td>3040.0</td>
+      <td>400.0</td>
+      <td>963.81</td>
+      <td>23.0</td>
+      <td>2900.0</td>
+      <td>5000.0</td>
+      <td>1000.0</td>
+      <td>...</td>
+      <td>15.0</td>
+      <td>1143.800000</td>
+      <td>1316.30</td>
+      <td>8364.78</td>
+      <td>8393.0</td>
+      <td>90.95</td>
+      <td>89.79</td>
+      <td>11379.37</td>
+      <td>44835.0</td>
+      <td>929027.1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1.0</td>
+      <td>4800.0</td>
+      <td>840.0</td>
+      <td>480.0</td>
+      <td>100.0</td>
+      <td>689.84</td>
+      <td>15.0</td>
+      <td>630.0</td>
+      <td>1200.0</td>
+      <td>170.0</td>
+      <td>...</td>
+      <td>15.0</td>
+      <td>589.500000</td>
+      <td>765.80</td>
+      <td>1755.00</td>
+      <td>4930.0</td>
+      <td>38.70</td>
+      <td>32.04</td>
+      <td>1653.06</td>
+      <td>37933.0</td>
+      <td>377828.6</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1.0</td>
+      <td>685.0</td>
+      <td>202.0</td>
+      <td>13.7</td>
+      <td>20.0</td>
+      <td>459.54</td>
+      <td>4.0</td>
+      <td>140.0</td>
+      <td>165.0</td>
+      <td>30.0</td>
+      <td>...</td>
+      <td>12.0</td>
+      <td>197.679557</td>
+      <td>152.25</td>
+      <td>1442.31</td>
+      <td>1456.0</td>
+      <td>9.73</td>
+      <td>8.34</td>
+      <td>686.16</td>
+      <td>8194.0</td>
+      <td>122031.7</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1.0</td>
+      <td>3000.0</td>
+      <td>800.0</td>
+      <td>1230.0</td>
+      <td>410.0</td>
+      <td>631.91</td>
+      <td>13.0</td>
+      <td>5000.0</td>
+      <td>5500.0</td>
+      <td>700.0</td>
+      <td>...</td>
+      <td>14.0</td>
+      <td>2220.600000</td>
+      <td>2244.10</td>
+      <td>9231.76</td>
+      <td>9286.0</td>
+      <td>136.60</td>
+      <td>140.20</td>
+      <td>9821.00</td>
+      <td>48260.0</td>
+      <td>1734973.5</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 29 columns</p>
+</div>
+
+<p>Excellent. We now have useable data for generating clustered correlation heatmaps. If we do that now, we get the following result:</p>
+<div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">clustermap</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">corr</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<div class="highlight"><pre><span></span>&lt;seaborn.matrix.ClusterGrid at 0x7fd12bb00278&gt;
+</pre></div>
+
+
+<p><img alt="png" src="images/output_9_1.png"></p>
+<p>There are some strong patterns here, but the labels aren't very useful. It would be nice to see if these are grouped by our categories of features, P&amp;F and E.</p>
+<p>In order to accomplish this, we first take our list of columns and split them into their respective groups.</p>
+<div class="highlight"><pre><span></span><span class="n">physical_financial</span> <span class="o">=</span> <span class="n">col_order</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span>
+<span class="n">economic</span> <span class="o">=</span> <span class="n">col_order</span><span class="p">[</span><span class="mi">10</span><span class="p">:]</span>
+</pre></div>
+
+
+<p>Next, we will need some colors. Seaborn makes this easy through the <code>color_palette()</code> function.</p>
+<div class="highlight"><pre><span></span><span class="n">palette</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">()</span>
+<span class="n">palette</span>
+</pre></div>
+
+
+<div class="highlight"><pre><span></span>[(0.12156862745098039, 0.4666666666666667, 0.7058823529411765),
+ (1.0, 0.4980392156862745, 0.054901960784313725),
+ (0.17254901960784313, 0.6274509803921569, 0.17254901960784313),
+ (0.8392156862745098, 0.15294117647058825, 0.1568627450980392),
+ (0.5803921568627451, 0.403921568627451, 0.7411764705882353),
+ (0.5490196078431373, 0.33725490196078434, 0.29411764705882354),
+ (0.8901960784313725, 0.4666666666666667, 0.7607843137254902),
+ (0.4980392156862745, 0.4980392156862745, 0.4980392156862745),
+ (0.7372549019607844, 0.7411764705882353, 0.13333333333333333),
+ (0.09019607843137255, 0.7450980392156863, 0.8117647058823529)]
+</pre></div>
+
+
+<p>To see what these colors look like, seaborn offers the useful <code>palplot()</code> function.</p>
+<div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">palplot</span><span class="p">(</span><span class="n">palette</span><span class="p">)</span>
+</pre></div>
+
+
+<p><img alt="png" src="/images/output_15_0.png"></p>
+<p>Very nice! In order to assign these colors to categories, seaborn will want a Series with the colors as values, and the associated features as index labels. Let's create that.</p>
+<div class="highlight"><pre><span></span><span class="c1"># Create dictionary with features as keys and colors as values</span>
+<span class="n">color_dict</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">physical_financial</span><span class="p">:</span>
+        <span class="n">color_dict</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">palette</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">color_dict</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">palette</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="c1"># Convert the dictionary into a Series</span>
+<span class="n">color_rows</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">color_dict</span><span class="p">)</span>
+<span class="n">color_rows</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+
+<div class="highlight"><pre><span></span>V-1    (0.12156862745098039, 0.4666666666666667, 0.70...
+V-2    (0.12156862745098039, 0.4666666666666667, 0.70...
+V-3    (0.12156862745098039, 0.4666666666666667, 0.70...
+V-4    (0.12156862745098039, 0.4666666666666667, 0.70...
+V-5    (0.12156862745098039, 0.4666666666666667, 0.70...
+dtype: object
+</pre></div>
+
+
+<p>In order to assign this color mapping to the clustered heatmap, we simply assign it to the <code>row_colors</code> and <code>col_colors</code> optional arguments.</p>
+<div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">clustermap</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">corr</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">,</span> <span class="n">row_colors</span><span class="o">=</span><span class="p">[</span><span class="n">color_rows</span><span class="p">],</span> <span class="n">col_colors</span><span class="o">=</span><span class="p">[</span><span class="n">color_rows</span><span class="p">])</span>
+</pre></div>
+
+
+<div class="highlight"><pre><span></span>&lt;seaborn.matrix.ClusterGrid at 0x7fd12b254080&gt;
+</pre></div>
+
+
+<p><img alt="png" src="/images/output_19_1.png"></p>
+<p>Very nice. Now, let's add a second layer. We might also want to know at sight what kind measurement each feature contains. Let's have a look at the data dictionary in order to determine this.</p>
+<div class="highlight"><pre><span></span><span class="c1"># Load the data dictionary in the second page of the Excel file</span>
+<span class="n">desc</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;data/raw/Residential-Building-Data-Set.xlsx&#39;</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">desc</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Variable Group</th>
+      <th>Variable ID</th>
+      <th>Descriptions</th>
+      <th>Unit</th>
+      <th>Time Lag Number p</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>PROJECT PHYSICAL AND FINANCIAL VARIABLES</td>
+      <td>V-1</td>
+      <td>Project locality defined in terms of zip codes</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>NaN</td>
+      <td>V-2</td>
+      <td>Total floor area of the building</td>
+      <td>m2</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>NaN</td>
+      <td>V-3</td>
+      <td>Lot area</td>
+      <td>m2</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>NaN</td>
+      <td>V-4</td>
+      <td>Total preliminary estimated construction cost ...</td>
+      <td>10000000 IRRm</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>NaN</td>
+      <td>V-5</td>
+      <td>Preliminary estimated construction cost based ...</td>
+      <td>10000 IRRm</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="highlight"><pre><span></span><span class="c1"># Convert the Unit column to string type so that we can get unique values</span>
+<span class="n">desc</span><span class="o">.</span><span class="n">Unit</span> <span class="o">=</span> <span class="n">desc</span><span class="o">.</span><span class="n">Unit</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+<span class="c1"># Get unique unit types</span>
+<span class="n">units</span> <span class="o">=</span> <span class="n">desc</span><span class="o">.</span><span class="n">Unit</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+</pre></div>
+
+
+<div class="highlight"><pre><span></span><span class="n">units</span>
+</pre></div>
+
+
+<div class="highlight"><pre><span></span>array([&#39;nan&#39;, &#39;m2 &#39;, &#39;10000000 IRRm &#39;, &#39;10000 IRRm &#39;,
+       &#39;As a number of time resolution e &#39;, &#39;10000 IRRm&#39;, &#39;m2&#39;,
+       &#39;10000000 IRRm&#39;, &#39;%&#39;, &#39;10000 IRRm /m2&#39;, &#39;IRRm&#39;], dtype=object)
+</pre></div>
+
+
+<p>It seems as though we measurements in currency (IRRm), in area (m2), and some other miscellaneous types of measures. Let's make a new mapping using the same pattern.</p>
+<div class="highlight"><pre><span></span><span class="n">unitmap</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="n">units</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;IRRm&quot;</span> <span class="ow">in</span> <span class="n">unit</span><span class="p">:</span>
+        <span class="n">unitmap</span><span class="p">[</span><span class="n">unit</span><span class="p">]</span> <span class="o">=</span> <span class="n">palette</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="s2">&quot;m2&quot;</span> <span class="ow">in</span> <span class="n">unit</span><span class="p">:</span>
+        <span class="n">unitmap</span><span class="p">[</span><span class="n">unit</span><span class="p">]</span> <span class="o">=</span> <span class="n">palette</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">unitmap</span><span class="p">[</span><span class="n">unit</span><span class="p">]</span> <span class="o">=</span> <span class="n">palette</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+</pre></div>
+
+
+<div class="highlight"><pre><span></span><span class="n">desc</span><span class="p">[</span><span class="s1">&#39;Color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">desc</span><span class="o">.</span><span class="n">Unit</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">unitmap</span><span class="p">)</span>
+<span class="n">desc</span><span class="p">[[</span><span class="s1">&#39;Variable ID  &#39;</span><span class="p">,</span> <span class="s1">&#39;Unit&#39;</span><span class="p">,</span> <span class="s1">&#39;Color&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Variable ID</th>
+      <th>Unit</th>
+      <th>Color</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>V-1</td>
+      <td>nan</td>
+      <td>(0.5803921568627451, 0.403921568627451, 0.7411...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>V-2</td>
+      <td>m2</td>
+      <td>(0.8392156862745098, 0.15294117647058825, 0.15...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>V-3</td>
+      <td>m2</td>
+      <td>(0.8392156862745098, 0.15294117647058825, 0.15...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>V-4</td>
+      <td>10000000 IRRm</td>
+      <td>(0.17254901960784313, 0.6274509803921569, 0.17...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>V-5</td>
+      <td>10000 IRRm</td>
+      <td>(0.17254901960784313, 0.6274509803921569, 0.17...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="highlight"><pre><span></span><span class="c1"># Delete extraneous row at end of dictionary</span>
+<span class="n">desc</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="mi">29</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+
+
+<div class="highlight"><pre><span></span><span class="c1"># Get only features and colors for mapping</span>
+<span class="n">color_rows_two</span> <span class="o">=</span> <span class="n">desc</span><span class="p">[[</span><span class="s1">&#39;Variable ID  &#39;</span><span class="p">,</span> <span class="s1">&#39;Color&#39;</span><span class="p">]]</span>
+<span class="c1"># Set features as index</span>
+<span class="n">color_rows_two</span> <span class="o">=</span> <span class="n">color_rows_two</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;Variable ID  &#39;</span><span class="p">)</span>
+<span class="c1"># Delete the index name for cleanliness</span>
+<span class="k">del</span> <span class="n">color_rows_two</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span>
+<span class="c1"># Use iloc to convert DataFrame into Series</span>
+<span class="n">color_rows_two</span> <span class="o">=</span> <span class="n">color_rows_two</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">color_rows_two</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+
+<div class="highlight"><pre><span></span>V-1    (0.5803921568627451, 0.403921568627451, 0.7411...
+V-2    (0.8392156862745098, 0.15294117647058825, 0.15...
+V-3    (0.8392156862745098, 0.15294117647058825, 0.15...
+V-4    (0.17254901960784313, 0.6274509803921569, 0.17...
+V-5    (0.17254901960784313, 0.6274509803921569, 0.17...
+Name: Color, dtype: object
+</pre></div>
+
+
+<p>Having completed all this, we simple pass both Series into <code>row_colors</code> and <code>col_colors</code> as a list. It is that simple.</p>
+<div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">clustermap</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">corr</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">,</span> <span class="n">row_colors</span><span class="o">=</span><span class="p">[</span><span class="n">color_rows</span><span class="p">,</span> <span class="n">color_rows_two</span><span class="p">],</span> <span class="n">col_colors</span><span class="o">=</span><span class="p">[</span><span class="n">color_rows</span><span class="p">,</span> <span class="n">color_rows_two</span><span class="p">])</span>
+</pre></div>
+
+
+<div class="highlight"><pre><span></span>&lt;seaborn.matrix.ClusterGrid at 0x7fd12a929588&gt;
+</pre></div>
+
+
+<p><img alt="png" src="/images/output_30_1.png"></p>
+<p>Voila! Two layers of row and column colors, for easy interpretation of feature clusters by groups.</p>
+<p>In my next post, I'll cover how to make custom legends for these color labels using matplotlib. Thanks for reading, and stay tuned!</p>
+      </div>
+      <div class="back-to-top">
+          <a href="#top">back to top</a>
+      </div>
+    </article>
+  </div>
+<!-- end article -->
+                <footer>
+                    <div class="icons">
+                    </div>
+                    <p>© <script>document.write(moment().format('YYYY'));</script> Chris</p>
+                </footer>
+        </div>
+</body>
+</html>

@@ -1,0 +1,646 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Chris Remmel</title><link href="/" rel="alternate"></link><link href="/feeds/all.atom.xml" rel="self"></link><id>/</id><updated>2019-04-05T00:00:00-04:00</updated><entry><title>Heatmap Color Labels in Seaborn</title><link href="/heatmap-color-labels-in-seaborn.html" rel="alternate"></link><published>2019-04-05T00:00:00-04:00</published><updated>2019-04-05T00:00:00-04:00</updated><author><name>Chris</name></author><id>tag:None,2019-04-05:/heatmap-color-labels-in-seaborn.html</id><summary type="html">&lt;h1&gt;Multiple Layers of Color Labels in Seaborn Heatmaps&lt;/h1&gt;
+&lt;p&gt;I'm currently working with biological test data, which by its nature tends to have a large number of features. This presents all sorts of challenges, not least of which is the difficulty in interpreting correlation heatmaps when there are so many rows …&lt;/p&gt;</summary><content type="html">&lt;h1&gt;Multiple Layers of Color Labels in Seaborn Heatmaps&lt;/h1&gt;
+&lt;p&gt;I'm currently working with biological test data, which by its nature tends to have a large number of features. This presents all sorts of challenges, not least of which is the difficulty in interpreting correlation heatmaps when there are so many rows and columns that the labels become impossible to read!&lt;/p&gt;
+&lt;p&gt;One solution to this problem is to group the features into categories, assign each category a color, and annotate the rows and columns of a heatmap. For a toy example of this using a more manageable non-biological dataset, consider the following:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Heatmap One" src="/images/heatmap_one.png"&gt;&lt;/p&gt;
+&lt;p&gt;This is a nice way to interpret the correlation heatmap of a large dataset, as the column and row colors allow you to identify useful clusters by sight. What if, however, each feature has not just one useful attribute for grouping, but two? For those working in life sciences, you might take the example of wanting to be able to know both reagent and antigen by sight.&lt;/p&gt;
+&lt;p&gt;Fortunately, seaborn makes this easy as well. Let's work through an example using the Residential Building Data Set from the UCI Machine Learning Library.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;pandas&lt;/span&gt; &lt;span class="kn"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;pd&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;numpy&lt;/span&gt; &lt;span class="kn"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;np&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;matplotlib.pyplot&lt;/span&gt; &lt;span class="kn"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;plt&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;seaborn&lt;/span&gt; &lt;span class="kn"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;sns&lt;/span&gt;
+
+&lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="n"&gt;matplotlib&lt;/span&gt; &lt;span class="n"&gt;inline&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;df&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;pd&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;read_excel&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;data/raw/Residential-Building-Data-Set.xlsx&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;head&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div&gt;
+&lt;style scoped&gt;
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+&lt;/style&gt;
+&lt;table border="1" class="dataframe"&gt;
+  &lt;thead&gt;
+    &lt;tr style="text-align: right;"&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;PROJECT DATES (PERSIAN CALENDAR)&lt;/th&gt;
+      &lt;th&gt;Unnamed: 1&lt;/th&gt;
+      &lt;th&gt;Unnamed: 2&lt;/th&gt;
+      &lt;th&gt;Unnamed: 3&lt;/th&gt;
+      &lt;th&gt;PROJECT PHYSICAL AND FINANCIAL VARIABLES&lt;/th&gt;
+      &lt;th&gt;Unnamed: 5&lt;/th&gt;
+      &lt;th&gt;Unnamed: 6&lt;/th&gt;
+      &lt;th&gt;Unnamed: 7&lt;/th&gt;
+      &lt;th&gt;Unnamed: 8&lt;/th&gt;
+      &lt;th&gt;Unnamed: 9&lt;/th&gt;
+      &lt;th&gt;...&lt;/th&gt;
+      &lt;th&gt;Unnamed: 99&lt;/th&gt;
+      &lt;th&gt;Unnamed: 100&lt;/th&gt;
+      &lt;th&gt;Unnamed: 101&lt;/th&gt;
+      &lt;th&gt;Unnamed: 102&lt;/th&gt;
+      &lt;th&gt;Unnamed: 103&lt;/th&gt;
+      &lt;th&gt;Unnamed: 104&lt;/th&gt;
+      &lt;th&gt;Unnamed: 105&lt;/th&gt;
+      &lt;th&gt;Unnamed: 106&lt;/th&gt;
+      &lt;th&gt;OUTPUTS&lt;/th&gt;
+      &lt;th&gt;Unnamed: 108&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;th&gt;0&lt;/th&gt;
+      &lt;td&gt;START YEAR&lt;/td&gt;
+      &lt;td&gt;START QUARTER&lt;/td&gt;
+      &lt;td&gt;COMPLETION YEAR&lt;/td&gt;
+      &lt;td&gt;COMPLETION QUARTER&lt;/td&gt;
+      &lt;td&gt;V-1&lt;/td&gt;
+      &lt;td&gt;V-2&lt;/td&gt;
+      &lt;td&gt;V-3&lt;/td&gt;
+      &lt;td&gt;V-4&lt;/td&gt;
+      &lt;td&gt;V-5&lt;/td&gt;
+      &lt;td&gt;V-6&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;V-22&lt;/td&gt;
+      &lt;td&gt;V-23&lt;/td&gt;
+      &lt;td&gt;V-24&lt;/td&gt;
+      &lt;td&gt;V-25&lt;/td&gt;
+      &lt;td&gt;V-26&lt;/td&gt;
+      &lt;td&gt;V-27&lt;/td&gt;
+      &lt;td&gt;V-28&lt;/td&gt;
+      &lt;td&gt;V-29&lt;/td&gt;
+      &lt;td&gt;V-9&lt;/td&gt;
+      &lt;td&gt;V-10&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;1&lt;/th&gt;
+      &lt;td&gt;81&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;85&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;3150&lt;/td&gt;
+      &lt;td&gt;920&lt;/td&gt;
+      &lt;td&gt;598.5&lt;/td&gt;
+      &lt;td&gt;190&lt;/td&gt;
+      &lt;td&gt;1010.84&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;815.5&lt;/td&gt;
+      &lt;td&gt;1755&lt;/td&gt;
+      &lt;td&gt;8002&lt;/td&gt;
+      &lt;td&gt;60.74&lt;/td&gt;
+      &lt;td&gt;54.26&lt;/td&gt;
+      &lt;td&gt;2978.26&lt;/td&gt;
+      &lt;td&gt;41407&lt;/td&gt;
+      &lt;td&gt;601988&lt;/td&gt;
+      &lt;td&gt;2200&lt;/td&gt;
+      &lt;td&gt;410&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;2&lt;/th&gt;
+      &lt;td&gt;84&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;89&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;7600&lt;/td&gt;
+      &lt;td&gt;1140&lt;/td&gt;
+      &lt;td&gt;3040&lt;/td&gt;
+      &lt;td&gt;400&lt;/td&gt;
+      &lt;td&gt;963.81&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;1316.3&lt;/td&gt;
+      &lt;td&gt;8364.78&lt;/td&gt;
+      &lt;td&gt;8393&lt;/td&gt;
+      &lt;td&gt;90.95&lt;/td&gt;
+      &lt;td&gt;89.79&lt;/td&gt;
+      &lt;td&gt;11379.4&lt;/td&gt;
+      &lt;td&gt;44835&lt;/td&gt;
+      &lt;td&gt;929027&lt;/td&gt;
+      &lt;td&gt;5000&lt;/td&gt;
+      &lt;td&gt;1000&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;3&lt;/th&gt;
+      &lt;td&gt;78&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;81&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;4800&lt;/td&gt;
+      &lt;td&gt;840&lt;/td&gt;
+      &lt;td&gt;480&lt;/td&gt;
+      &lt;td&gt;100&lt;/td&gt;
+      &lt;td&gt;689.84&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;765.8&lt;/td&gt;
+      &lt;td&gt;1755&lt;/td&gt;
+      &lt;td&gt;4930&lt;/td&gt;
+      &lt;td&gt;38.7&lt;/td&gt;
+      &lt;td&gt;32.04&lt;/td&gt;
+      &lt;td&gt;1653.06&lt;/td&gt;
+      &lt;td&gt;37933&lt;/td&gt;
+      &lt;td&gt;377829&lt;/td&gt;
+      &lt;td&gt;1200&lt;/td&gt;
+      &lt;td&gt;170&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;4&lt;/th&gt;
+      &lt;td&gt;72&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+      &lt;td&gt;73&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;685&lt;/td&gt;
+      &lt;td&gt;202&lt;/td&gt;
+      &lt;td&gt;13.7&lt;/td&gt;
+      &lt;td&gt;20&lt;/td&gt;
+      &lt;td&gt;459.54&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;152.25&lt;/td&gt;
+      &lt;td&gt;1442.31&lt;/td&gt;
+      &lt;td&gt;1456&lt;/td&gt;
+      &lt;td&gt;9.73&lt;/td&gt;
+      &lt;td&gt;8.34&lt;/td&gt;
+      &lt;td&gt;686.16&lt;/td&gt;
+      &lt;td&gt;8194&lt;/td&gt;
+      &lt;td&gt;122032&lt;/td&gt;
+      &lt;td&gt;165&lt;/td&gt;
+      &lt;td&gt;30&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;5 rows × 109 columns&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This dataset contains measurements relating to real estate construction projects in Iran. Broadly speaking, these measurements can be grouped into &lt;strong&gt;physical and financial (P&amp;amp;F)&lt;/strong&gt; measurements which were recorded once, and &lt;strong&gt;economic (E)&lt;/strong&gt; measurements which were recorded at five time points throughout the contruction project. For more information on the features, you may check out the data dictionary here:&lt;/p&gt;
+&lt;p&gt;First, we'll clean the data so that it contains only the P&amp;amp;F measurements and the E measurements at the final timepoint, converted into the appropriate data type.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# Use the first row as the columns&lt;/span&gt;
+&lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;columns&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;iloc&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,:]&lt;/span&gt;
+&lt;span class="c1"&gt;# Select only the P&amp;amp;F features, and the E features for one timepoint&lt;/span&gt;
+&lt;span class="n"&gt;df&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;pd&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;concat&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;iloc&lt;/span&gt;&lt;span class="p"&gt;[:,&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;12&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;iloc&lt;/span&gt;&lt;span class="p"&gt;[:,&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;21&lt;/span&gt;&lt;span class="p"&gt;:]],&lt;/span&gt; &lt;span class="n"&gt;axis&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="c1"&gt;# Reorder the columns so that they are in ascending numerical order&lt;/span&gt;
+&lt;span class="n"&gt;col_order&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;V-&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="nb"&gt;str&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;30&lt;/span&gt;&lt;span class="p"&gt;)]&lt;/span&gt;
+&lt;span class="n"&gt;df&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;col_order&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="c1"&gt;# Drop the extra row of column names and reset the index numbering&lt;/span&gt;
+&lt;span class="n"&gt;df&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;drop&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;reset_index&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;drop&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="c1"&gt;# Convert the DataFrame to numeric&lt;/span&gt;
+&lt;span class="n"&gt;df&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;apply&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;pd&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;to_numeric&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;axis&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;head&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div&gt;
+&lt;style scoped&gt;
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+&lt;/style&gt;
+&lt;table border="1" class="dataframe"&gt;
+  &lt;thead&gt;
+    &lt;tr style="text-align: right;"&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;V-1&lt;/th&gt;
+      &lt;th&gt;V-2&lt;/th&gt;
+      &lt;th&gt;V-3&lt;/th&gt;
+      &lt;th&gt;V-4&lt;/th&gt;
+      &lt;th&gt;V-5&lt;/th&gt;
+      &lt;th&gt;V-6&lt;/th&gt;
+      &lt;th&gt;V-7&lt;/th&gt;
+      &lt;th&gt;V-8&lt;/th&gt;
+      &lt;th&gt;V-9&lt;/th&gt;
+      &lt;th&gt;V-10&lt;/th&gt;
+      &lt;th&gt;...&lt;/th&gt;
+      &lt;th&gt;V-20&lt;/th&gt;
+      &lt;th&gt;V-21&lt;/th&gt;
+      &lt;th&gt;V-22&lt;/th&gt;
+      &lt;th&gt;V-23&lt;/th&gt;
+      &lt;th&gt;V-24&lt;/th&gt;
+      &lt;th&gt;V-25&lt;/th&gt;
+      &lt;th&gt;V-26&lt;/th&gt;
+      &lt;th&gt;V-27&lt;/th&gt;
+      &lt;th&gt;V-28&lt;/th&gt;
+      &lt;th&gt;V-29&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;th&gt;0&lt;/th&gt;
+      &lt;td&gt;1.0&lt;/td&gt;
+      &lt;td&gt;3150.0&lt;/td&gt;
+      &lt;td&gt;920.0&lt;/td&gt;
+      &lt;td&gt;598.5&lt;/td&gt;
+      &lt;td&gt;190.0&lt;/td&gt;
+      &lt;td&gt;1010.84&lt;/td&gt;
+      &lt;td&gt;16.0&lt;/td&gt;
+      &lt;td&gt;1200.0&lt;/td&gt;
+      &lt;td&gt;2200.0&lt;/td&gt;
+      &lt;td&gt;410.0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;15.0&lt;/td&gt;
+      &lt;td&gt;733.800000&lt;/td&gt;
+      &lt;td&gt;815.50&lt;/td&gt;
+      &lt;td&gt;1755.00&lt;/td&gt;
+      &lt;td&gt;8002.0&lt;/td&gt;
+      &lt;td&gt;60.74&lt;/td&gt;
+      &lt;td&gt;54.26&lt;/td&gt;
+      &lt;td&gt;2978.26&lt;/td&gt;
+      &lt;td&gt;41407.0&lt;/td&gt;
+      &lt;td&gt;601988.1&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;1&lt;/th&gt;
+      &lt;td&gt;1.0&lt;/td&gt;
+      &lt;td&gt;7600.0&lt;/td&gt;
+      &lt;td&gt;1140.0&lt;/td&gt;
+      &lt;td&gt;3040.0&lt;/td&gt;
+      &lt;td&gt;400.0&lt;/td&gt;
+      &lt;td&gt;963.81&lt;/td&gt;
+      &lt;td&gt;23.0&lt;/td&gt;
+      &lt;td&gt;2900.0&lt;/td&gt;
+      &lt;td&gt;5000.0&lt;/td&gt;
+      &lt;td&gt;1000.0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;15.0&lt;/td&gt;
+      &lt;td&gt;1143.800000&lt;/td&gt;
+      &lt;td&gt;1316.30&lt;/td&gt;
+      &lt;td&gt;8364.78&lt;/td&gt;
+      &lt;td&gt;8393.0&lt;/td&gt;
+      &lt;td&gt;90.95&lt;/td&gt;
+      &lt;td&gt;89.79&lt;/td&gt;
+      &lt;td&gt;11379.37&lt;/td&gt;
+      &lt;td&gt;44835.0&lt;/td&gt;
+      &lt;td&gt;929027.1&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;2&lt;/th&gt;
+      &lt;td&gt;1.0&lt;/td&gt;
+      &lt;td&gt;4800.0&lt;/td&gt;
+      &lt;td&gt;840.0&lt;/td&gt;
+      &lt;td&gt;480.0&lt;/td&gt;
+      &lt;td&gt;100.0&lt;/td&gt;
+      &lt;td&gt;689.84&lt;/td&gt;
+      &lt;td&gt;15.0&lt;/td&gt;
+      &lt;td&gt;630.0&lt;/td&gt;
+      &lt;td&gt;1200.0&lt;/td&gt;
+      &lt;td&gt;170.0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;15.0&lt;/td&gt;
+      &lt;td&gt;589.500000&lt;/td&gt;
+      &lt;td&gt;765.80&lt;/td&gt;
+      &lt;td&gt;1755.00&lt;/td&gt;
+      &lt;td&gt;4930.0&lt;/td&gt;
+      &lt;td&gt;38.70&lt;/td&gt;
+      &lt;td&gt;32.04&lt;/td&gt;
+      &lt;td&gt;1653.06&lt;/td&gt;
+      &lt;td&gt;37933.0&lt;/td&gt;
+      &lt;td&gt;377828.6&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;3&lt;/th&gt;
+      &lt;td&gt;1.0&lt;/td&gt;
+      &lt;td&gt;685.0&lt;/td&gt;
+      &lt;td&gt;202.0&lt;/td&gt;
+      &lt;td&gt;13.7&lt;/td&gt;
+      &lt;td&gt;20.0&lt;/td&gt;
+      &lt;td&gt;459.54&lt;/td&gt;
+      &lt;td&gt;4.0&lt;/td&gt;
+      &lt;td&gt;140.0&lt;/td&gt;
+      &lt;td&gt;165.0&lt;/td&gt;
+      &lt;td&gt;30.0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;12.0&lt;/td&gt;
+      &lt;td&gt;197.679557&lt;/td&gt;
+      &lt;td&gt;152.25&lt;/td&gt;
+      &lt;td&gt;1442.31&lt;/td&gt;
+      &lt;td&gt;1456.0&lt;/td&gt;
+      &lt;td&gt;9.73&lt;/td&gt;
+      &lt;td&gt;8.34&lt;/td&gt;
+      &lt;td&gt;686.16&lt;/td&gt;
+      &lt;td&gt;8194.0&lt;/td&gt;
+      &lt;td&gt;122031.7&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;4&lt;/th&gt;
+      &lt;td&gt;1.0&lt;/td&gt;
+      &lt;td&gt;3000.0&lt;/td&gt;
+      &lt;td&gt;800.0&lt;/td&gt;
+      &lt;td&gt;1230.0&lt;/td&gt;
+      &lt;td&gt;410.0&lt;/td&gt;
+      &lt;td&gt;631.91&lt;/td&gt;
+      &lt;td&gt;13.0&lt;/td&gt;
+      &lt;td&gt;5000.0&lt;/td&gt;
+      &lt;td&gt;5500.0&lt;/td&gt;
+      &lt;td&gt;700.0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;14.0&lt;/td&gt;
+      &lt;td&gt;2220.600000&lt;/td&gt;
+      &lt;td&gt;2244.10&lt;/td&gt;
+      &lt;td&gt;9231.76&lt;/td&gt;
+      &lt;td&gt;9286.0&lt;/td&gt;
+      &lt;td&gt;136.60&lt;/td&gt;
+      &lt;td&gt;140.20&lt;/td&gt;
+      &lt;td&gt;9821.00&lt;/td&gt;
+      &lt;td&gt;48260.0&lt;/td&gt;
+      &lt;td&gt;1734973.5&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;5 rows × 29 columns&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Excellent. We now have useable data for generating clustered correlation heatmaps. If we do that now, we get the following result:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;sns&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;clustermap&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;corr&lt;/span&gt;&lt;span class="p"&gt;(),&lt;/span&gt; &lt;span class="n"&gt;cmap&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;bwr&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&amp;lt;seaborn.matrix.ClusterGrid at 0x7fd12bb00278&amp;gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;img alt="png" src="images/output_9_1.png"&gt;&lt;/p&gt;
+&lt;p&gt;There are some strong patterns here, but the labels aren't very useful. It would be nice to see if these are grouped by our categories of features, P&amp;amp;F and E.&lt;/p&gt;
+&lt;p&gt;In order to accomplish this, we first take our list of columns and split them into their respective groups.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;physical_financial&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;col_order&lt;/span&gt;&lt;span class="p"&gt;[:&lt;/span&gt;&lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="n"&gt;economic&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;col_order&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;:]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Next, we will need some colors. Seaborn makes this easy through the &lt;code&gt;color_palette()&lt;/code&gt; function.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;palette&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;sns&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;color_palette&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;palette&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;[(0.12156862745098039, 0.4666666666666667, 0.7058823529411765),
+ (1.0, 0.4980392156862745, 0.054901960784313725),
+ (0.17254901960784313, 0.6274509803921569, 0.17254901960784313),
+ (0.8392156862745098, 0.15294117647058825, 0.1568627450980392),
+ (0.5803921568627451, 0.403921568627451, 0.7411764705882353),
+ (0.5490196078431373, 0.33725490196078434, 0.29411764705882354),
+ (0.8901960784313725, 0.4666666666666667, 0.7607843137254902),
+ (0.4980392156862745, 0.4980392156862745, 0.4980392156862745),
+ (0.7372549019607844, 0.7411764705882353, 0.13333333333333333),
+ (0.09019607843137255, 0.7450980392156863, 0.8117647058823529)]
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;To see what these colors look like, seaborn offers the useful &lt;code&gt;palplot()&lt;/code&gt; function.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;sns&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;palplot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;palette&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;img alt="png" src="/images/output_15_0.png"&gt;&lt;/p&gt;
+&lt;p&gt;Very nice! In order to assign these colors to categories, seaborn will want a Series with the colors as values, and the associated features as index labels. Let's create that.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# Create dictionary with features as keys and colors as values&lt;/span&gt;
+&lt;span class="n"&gt;color_dict&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{}&lt;/span&gt;
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;col&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;columns&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;col&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;physical_financial&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="n"&gt;color_dict&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;col&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;palette&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+    &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="n"&gt;color_dict&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;col&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;palette&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="c1"&gt;# Convert the dictionary into a Series&lt;/span&gt;
+&lt;span class="n"&gt;color_rows&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;pd&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Series&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;color_dict&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;color_rows&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;head&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;V-1    (0.12156862745098039, 0.4666666666666667, 0.70...
+V-2    (0.12156862745098039, 0.4666666666666667, 0.70...
+V-3    (0.12156862745098039, 0.4666666666666667, 0.70...
+V-4    (0.12156862745098039, 0.4666666666666667, 0.70...
+V-5    (0.12156862745098039, 0.4666666666666667, 0.70...
+dtype: object
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;In order to assign this color mapping to the clustered heatmap, we simply assign it to the &lt;code&gt;row_colors&lt;/code&gt; and &lt;code&gt;col_colors&lt;/code&gt; optional arguments.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;sns&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;clustermap&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;corr&lt;/span&gt;&lt;span class="p"&gt;(),&lt;/span&gt; &lt;span class="n"&gt;cmap&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;bwr&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;row_colors&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;color_rows&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;col_colors&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;color_rows&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&amp;lt;seaborn.matrix.ClusterGrid at 0x7fd12b254080&amp;gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;img alt="png" src="/images/output_19_1.png"&gt;&lt;/p&gt;
+&lt;p&gt;Very nice. Now, let's add a second layer. We might also want to know at sight what kind measurement each feature contains. Let's have a look at the data dictionary in order to determine this.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# Load the data dictionary in the second page of the Excel file&lt;/span&gt;
+&lt;span class="n"&gt;desc&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;pd&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;read_excel&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;data/raw/Residential-Building-Data-Set.xlsx&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;sheet_name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;desc&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;head&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div&gt;
+&lt;style scoped&gt;
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+&lt;/style&gt;
+&lt;table border="1" class="dataframe"&gt;
+  &lt;thead&gt;
+    &lt;tr style="text-align: right;"&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;Variable Group&lt;/th&gt;
+      &lt;th&gt;Variable ID&lt;/th&gt;
+      &lt;th&gt;Descriptions&lt;/th&gt;
+      &lt;th&gt;Unit&lt;/th&gt;
+      &lt;th&gt;Time Lag Number p&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;th&gt;0&lt;/th&gt;
+      &lt;td&gt;PROJECT PHYSICAL AND FINANCIAL VARIABLES&lt;/td&gt;
+      &lt;td&gt;V-1&lt;/td&gt;
+      &lt;td&gt;Project locality defined in terms of zip codes&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;1&lt;/th&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;V-2&lt;/td&gt;
+      &lt;td&gt;Total floor area of the building&lt;/td&gt;
+      &lt;td&gt;m2&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;2&lt;/th&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;V-3&lt;/td&gt;
+      &lt;td&gt;Lot area&lt;/td&gt;
+      &lt;td&gt;m2&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;3&lt;/th&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;V-4&lt;/td&gt;
+      &lt;td&gt;Total preliminary estimated construction cost ...&lt;/td&gt;
+      &lt;td&gt;10000000 IRRm&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;4&lt;/th&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;V-5&lt;/td&gt;
+      &lt;td&gt;Preliminary estimated construction cost based ...&lt;/td&gt;
+      &lt;td&gt;10000 IRRm&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# Convert the Unit column to string type so that we can get unique values&lt;/span&gt;
+&lt;span class="n"&gt;desc&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Unit&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;desc&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Unit&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;astype&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;str&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="c1"&gt;# Get unique unit types&lt;/span&gt;
+&lt;span class="n"&gt;units&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;desc&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Unit&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;unique&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;units&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;array([&amp;#39;nan&amp;#39;, &amp;#39;m2 &amp;#39;, &amp;#39;10000000 IRRm &amp;#39;, &amp;#39;10000 IRRm &amp;#39;,
+       &amp;#39;As a number of time resolution e &amp;#39;, &amp;#39;10000 IRRm&amp;#39;, &amp;#39;m2&amp;#39;,
+       &amp;#39;10000000 IRRm&amp;#39;, &amp;#39;%&amp;#39;, &amp;#39;10000 IRRm /m2&amp;#39;, &amp;#39;IRRm&amp;#39;], dtype=object)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;It seems as though we measurements in currency (IRRm), in area (m2), and some other miscellaneous types of measures. Let's make a new mapping using the same pattern.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;unitmap&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{}&lt;/span&gt;
+
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;unit&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;units&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;IRRm&amp;quot;&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;unit&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="n"&gt;unitmap&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;unit&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;palette&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+    &lt;span class="k"&gt;elif&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;m2&amp;quot;&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;unit&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="n"&gt;unitmap&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;unit&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;palette&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+    &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="n"&gt;unitmap&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;unit&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;palette&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;desc&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Color&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;desc&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Unit&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;map&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;unitmap&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;desc&lt;/span&gt;&lt;span class="p"&gt;[[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Variable ID  &amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Unit&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Color&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]]&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;head&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div&gt;
+&lt;style scoped&gt;
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+&lt;/style&gt;
+&lt;table border="1" class="dataframe"&gt;
+  &lt;thead&gt;
+    &lt;tr style="text-align: right;"&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;Variable ID&lt;/th&gt;
+      &lt;th&gt;Unit&lt;/th&gt;
+      &lt;th&gt;Color&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;th&gt;0&lt;/th&gt;
+      &lt;td&gt;V-1&lt;/td&gt;
+      &lt;td&gt;nan&lt;/td&gt;
+      &lt;td&gt;(0.5803921568627451, 0.403921568627451, 0.7411...&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;1&lt;/th&gt;
+      &lt;td&gt;V-2&lt;/td&gt;
+      &lt;td&gt;m2&lt;/td&gt;
+      &lt;td&gt;(0.8392156862745098, 0.15294117647058825, 0.15...&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;2&lt;/th&gt;
+      &lt;td&gt;V-3&lt;/td&gt;
+      &lt;td&gt;m2&lt;/td&gt;
+      &lt;td&gt;(0.8392156862745098, 0.15294117647058825, 0.15...&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;3&lt;/th&gt;
+      &lt;td&gt;V-4&lt;/td&gt;
+      &lt;td&gt;10000000 IRRm&lt;/td&gt;
+      &lt;td&gt;(0.17254901960784313, 0.6274509803921569, 0.17...&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;4&lt;/th&gt;
+      &lt;td&gt;V-5&lt;/td&gt;
+      &lt;td&gt;10000 IRRm&lt;/td&gt;
+      &lt;td&gt;(0.17254901960784313, 0.6274509803921569, 0.17...&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# Delete extraneous row at end of dictionary&lt;/span&gt;
+&lt;span class="n"&gt;desc&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;drop&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;29&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;inplace&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# Get only features and colors for mapping&lt;/span&gt;
+&lt;span class="n"&gt;color_rows_two&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;desc&lt;/span&gt;&lt;span class="p"&gt;[[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Variable ID  &amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Color&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]]&lt;/span&gt;
+&lt;span class="c1"&gt;# Set features as index&lt;/span&gt;
+&lt;span class="n"&gt;color_rows_two&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;color_rows_two&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;set_index&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Variable ID  &amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="c1"&gt;# Delete the index name for cleanliness&lt;/span&gt;
+&lt;span class="k"&gt;del&lt;/span&gt; &lt;span class="n"&gt;color_rows_two&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;index&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;name&lt;/span&gt;
+&lt;span class="c1"&gt;# Use iloc to convert DataFrame into Series&lt;/span&gt;
+&lt;span class="n"&gt;color_rows_two&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;color_rows_two&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;iloc&lt;/span&gt;&lt;span class="p"&gt;[:,&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="n"&gt;color_rows_two&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;head&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;V-1    (0.5803921568627451, 0.403921568627451, 0.7411...
+V-2    (0.8392156862745098, 0.15294117647058825, 0.15...
+V-3    (0.8392156862745098, 0.15294117647058825, 0.15...
+V-4    (0.17254901960784313, 0.6274509803921569, 0.17...
+V-5    (0.17254901960784313, 0.6274509803921569, 0.17...
+Name: Color, dtype: object
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Having completed all this, we simple pass both Series into &lt;code&gt;row_colors&lt;/code&gt; and &lt;code&gt;col_colors&lt;/code&gt; as a list. It is that simple.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;sns&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;clustermap&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;corr&lt;/span&gt;&lt;span class="p"&gt;(),&lt;/span&gt; &lt;span class="n"&gt;cmap&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;bwr&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;row_colors&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;color_rows&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;color_rows_two&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;col_colors&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;color_rows&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;color_rows_two&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&amp;lt;seaborn.matrix.ClusterGrid at 0x7fd12a929588&amp;gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;img alt="png" src="/images/output_30_1.png"&gt;&lt;/p&gt;
+&lt;p&gt;Voila! Two layers of row and column colors, for easy interpretation of feature clusters by groups.&lt;/p&gt;
+&lt;p&gt;In my next post, I'll cover how to make custom legends for these color labels using matplotlib. Thanks for reading, and stay tuned!&lt;/p&gt;</content></entry></feed>
