@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*- #
 from __future__ import unicode_literals
 
-AUTHOR = 'Chris'
+AUTHOR = 'Chris Remmel'
 SITENAME = 'Chris Remmel'
-SITEURL = ''
+SITEURL = 'https://calremmel.github.io'
 
 PATH = 'content'
 
@@ -29,9 +29,15 @@ LINKS = (('Pelican', 'http://getpelican.com/'),
 SOCIAL = (('You can add links in your config file', '#'),
           ('Another social link', '#'),)
 
-DEFAULT_PAGINATION = 10
+DEFAULT_PAGINATION = False
 
 # Uncomment following line if you want document-relative URLs when developing
 #RELATIVE_URLS = True
 
 THEME = 'brutalist'
+
+FIRST_NAME = 'Chris'
+TWITTER_USERNAME = '@chrisremmel'
+
+TWITTER = 'https://twitter.com/chrisremmel'
+GITHUB = 'https://github.com/calremmel'
