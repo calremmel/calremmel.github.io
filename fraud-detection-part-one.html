@@ -80,11 +80,11 @@
          <h1>Fraud Detection in Python: Part One</h1>
 <h2>Visualization and Unbalanced Classes</h2>
 <p><img alt="png" src="/images/pca_fraud_title.png"></p>
-<p>Fraud detection is an important area of business where machine learning techniques have a particularly powerful use case. While fraud detection as a discipline predates the widespread popularity of machine learning, traditional techniques rely primarily on rules of thumb for flagging potentially fraudulent behaviour. These rules can yield impressive results, but they cannot deal with interactions between different variables or improve over time the way a machine learning model can.</p>
+<p>Fraud detection is an important area of business where machine learning techniques have a particularly powerful use case. While fraud detection as a discipline predates the widespread popularity of machine learning, traditional techniques rely primarily on rules of thumb for flagging potentially fraudulent behavior. These rules can yield impressive results, but they cannot deal with interactions between different variables or improve over time the way a machine learning model can.</p>
 <p>This is part one in a multi-part deep dive into the latest and greatest in fraud detection techniques using machine learning in the Python programming language. I'll be going through the very latest methods for predicting rare events like fraud, starting from the basics and proceeding through the cutting edge.</p>
 <p>This series will be a set of living documents, and I will be updating them as much as I can as new ideas arise and as I learn more myself! Updates will be logged at the bottom of the page, so check there to see if there is anything new.</p>
 <h1>Visualizing Fraud</h1>
-<p>Part of what makes it so difficult to detect fraud is that <strong>fraud is rare.</strong> Within any given dataset of transactions, there will usually be far more legitimate cases than fraudulent ones. This makes it difficult to build a profile for what might distiguish fraud from non-fraud, and it makes it very difficult to avoid flagging legitimate transactions as fraud inadvertently when you try.</p>
+<p>Part of what makes it so difficult to detect fraud is that <strong>fraud is rare.</strong> Within any given dataset of transactions, there will usually be far more legitimate cases than fraudulent ones. This makes it difficult to build a profile for what might distinguish fraud from non-fraud, and it makes it very difficult to avoid flagging legitimate transactions as fraud inadvertently when you try.</p>
 <p>To get a sense of this, it is useful to have a way to visualize the frequency of fraud versus non-fraud. That's where we'll start.</p>
 <p>Throughout this series, we'll be working with <strong>Synthetic Financial Datasets For Fraud Detection,</strong> generously provided by the Digital Forensics Research Group from NTNU in Gjøvik, Norway. An explanation of the dataset, the data dictionary, and the data itself are all available on Kaggle. <a href="https://www.kaggle.com/ntnu-testimon/paysim1">Feel free to download it if you would like to follow along</a>.</p>
 <p>First, let's import the libraries we'll need, and take a first glance at the dataset.</p>
@@ -249,7 +249,7 @@ None
 <li><strong>isFraud</strong> - This is the transactions made by the fraudulent agents inside the simulation. In this specific dataset the fraudulent behavior of the agents aims to profit by taking control or customers accounts and try to empty the funds by transferring to another account and then cashing out of the system.</li>
 <li><strong>isFlaggedFraud</strong> - The business model aims to control massive transfers from one account to another and flags illegal attempts. An illegal attempt in this dataset is an attempt to transfer more than 200.000 in a single transaction.</li>
 </ul>
-<p>It appears that part of our task will be to improve as much on <code>isFlaggedFraud</code> as possible. This is ideal, as it represents a typical rules-based heuristic for identifying fraud, and this is ecactly the kind of benchmark we want to show we can outperform. We'll have a look at exactly how well they did at a later point in the series.</p>
+<p>It appears that part of our task will be to improve as much on <code>isFlaggedFraud</code> as possible. This is ideal, as it represents a typical rules-based heuristic for identifying fraud, and this is exactly the kind of benchmark we want to show we can outperform. We'll have a look at exactly how well they did at a later point in the series.</p>
 <p>Next question: How many and what percentage of these entries are fraud?</p>
 <div class="highlight"><pre><span></span><span class="n">counts</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;isFraud&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
 <span class="n">counts</span>
@@ -273,12 +273,14 @@ Name: isFraud, dtype: float64
 
 
 <p>Herein lies the central problem: only a little over <strong>.1%</strong> of these entries are fraudulent.</p>
-<p>In order to make this more visually apparent, we'll use the following process:
-1. We'll take a large random sample from the dataset. I've learned from hard experience that plotting millions of points on your home laptop can take a good long while otherwise.
-2. We'll drop <code>nameOrig</code> and <code>nameDest</code> for now. These may be useful for modeling at a later point, but they will require some transformation, and for now we just want to get a sense of scale
-3. We'll transform the <code>type</code> column into numeric dummy variables, so as to be able to include this information in our modeling
-4. We'll reduce the dataset into two dimensions using Principal Component Analysis for plotting
-5. We'll create a scatterplot of the reduced data, colored by fraudulent vs legitimate transactions</p>
+<p>In order to make this more visually apparent, we'll use the following process:</p>
+<ol>
+<li>We'll take a large random sample from the dataset. I've learned from hard experience that plotting millions of points on your home laptop can take a good long while otherwise</li>
+<li>We'll drop <code>nameOrig</code> and <code>nameDest</code> for now. These may be useful for modeling at a later point, but they will require some transformation, and for now we just want to get a sense of scale</li>
+<li>We'll transform the <code>type</code> column into numeric dummy variables, so as to be able to include this information in our modeling</li>
+<li>We'll reduce the dataset into two dimensions using Principal Component Analysis for plotting</li>
+<li>We'll create a scatterplot of the reduced data, colored by fraudulent vs legitimate transactions</li>
+</ol>
 <div class="highlight"><pre><span></span><span class="c1"># Take random sample of dataset</span>
 <span class="n">sample</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 </pre></div>
@@ -394,7 +396,7 @@ Name: isFraud, dtype: int64
 <p>The way we deal with imbalanced classes is through <strong>resampling,</strong> which covers an array of techniques for making the ratio of classes more equitable. These techniques may be broadly separated into three categories:</p>
 <ol>
 <li><strong>Random Under-Sampling (RUS):</strong><ul>
-<li>Take a random sample of the majority class and train the model on the sample combined with the entirity of the minority class</li>
+<li>Take a random sample of the majority class and train the model on the sample combined with the entirety of the minority class</li>
 </ul>
 </li>
 <li><strong>Random Over-Sampling (ROS):</strong><ul>
@@ -408,7 +410,7 @@ Name: isFraud, dtype: int64
 </ol>
 <p>How to choose? <strong>RUS</strong> may be appropriate when there is a large enough population of the minority class that a representative sample of the majority class will make the class sizes equitable. RUS may be a good option in our case, as given our majority class size of 6354407 and minority class size of 8213, a sample size of 9589 for the majority class would give us a representative sample with a confidence of 95% and a margin of error of 1%.</p>
 <p>For over-sampling techniques, given that our cases of fraud are similar enough to each other that KNN might produce good representative data, <strong>SMOTE</strong> could also produce good results. If our fraud cases were more spread out, creating synthetic data using KNN could produce wildly unrepresentative noise, throwing the model off.</p>
-<p>If there is a situation where <strong>ROS</strong> would be preferable to both RUS and SMOTE, I'm not sure what that is! Training the model on duplicate data is a huge drawback, and could lead to serious overfitting on very specific datapoints.</p>
+<p>If there is a situation where <strong>ROS</strong> would be preferable to both RUS and SMOTE, I'm not sure what that is! Training the model on duplicate data is a huge drawback, and could lead to serious overfitting on very specific data points.</p>
 <p>In our case, as both <strong>RUS</strong> and <strong>SMOTE</strong> are solid options, we will try them both.</p>
 <h2>Random Under-Sampling</h2>
 <p>Both of our resampling strategies are implemented in the <code>imblearn</code> library. The documentation may be found <a href="https://imbalanced-learn.readthedocs.io/en/stable/index.html">by clicking here</a>. I'll explain the parameters we'll be using as we go along.</p>
