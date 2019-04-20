@@ -51,7 +51,8 @@
             <a href="#menu" id="menu-link">more stuff</a>
             <nav id="menu">
                 <ul>
-                            <li class="active"><a href="https://calremmel.github.io/category/dataviz.html">dataviz</a></li>
+                            <li><a href="https://calremmel.github.io/category/dataviz.html">dataviz</a></li>
+                            <li class="active"><a href="https://calremmel.github.io/category/fraud-detection.html">fraud-detection</a></li>
                             <li><a href="https://calremmel.github.io/category/project.html">project</a></li>
                 </ul>
             </nav>
@@ -98,25 +99,115 @@
 
 
 <div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../data/raw/PS_20174392719_1491204439457_log.csv&#39;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 
 
-<div class="highlight"><pre><span></span>   step      type    amount     nameOrig  oldbalanceOrg  newbalanceOrig  \
-0     1   PAYMENT   9839.64  C1231006815       170136.0       160296.36   
-1     1   PAYMENT   1864.28  C1666544295        21249.0        19384.72   
-2     1  TRANSFER    181.00  C1305486145          181.0            0.00   
-3     1  CASH_OUT    181.00   C840083671          181.0            0.00   
-4     1   PAYMENT  11668.14  C2048537720        41554.0        29885.86
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
-      nameDest  oldbalanceDest  newbalanceDest  isFraud  isFlaggedFraud  
-0  M1979787155             0.0             0.0        0               0  
-1  M2044282225             0.0             0.0        0               0  
-2   C553264065             0.0             0.0        1               0  
-3    C38997010         21182.0             0.0        1               0  
-4  M1230701703             0.0             0.0        0               0
-</pre></div>
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
 
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>step</th>
+      <th>type</th>
+      <th>amount</th>
+      <th>nameOrig</th>
+      <th>oldbalanceOrg</th>
+      <th>newbalanceOrig</th>
+      <th>nameDest</th>
+      <th>oldbalanceDest</th>
+      <th>newbalanceDest</th>
+      <th>isFraud</th>
+      <th>isFlaggedFraud</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>PAYMENT</td>
+      <td>9839.64</td>
+      <td>C1231006815</td>
+      <td>170136.0</td>
+      <td>160296.36</td>
+      <td>M1979787155</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>PAYMENT</td>
+      <td>1864.28</td>
+      <td>C1666544295</td>
+      <td>21249.0</td>
+      <td>19384.72</td>
+      <td>M2044282225</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1</td>
+      <td>TRANSFER</td>
+      <td>181.00</td>
+      <td>C1305486145</td>
+      <td>181.0</td>
+      <td>0.00</td>
+      <td>C553264065</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>CASH_OUT</td>
+      <td>181.00</td>
+      <td>C840083671</td>
+      <td>181.0</td>
+      <td>0.00</td>
+      <td>C38997010</td>
+      <td>21182.0</td>
+      <td>0.0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1</td>
+      <td>PAYMENT</td>
+      <td>11668.14</td>
+      <td>C2048537720</td>
+      <td>41554.0</td>
+      <td>29885.86</td>
+      <td>M1230701703</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
 <div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">info</span><span class="p">())</span>
 </pre></div>
