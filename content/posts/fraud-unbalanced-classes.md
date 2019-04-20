@@ -4,8 +4,7 @@ category: fraud-detection
 date: 2019-04-20
 modified: 2019-04-20
 
-# Fraud Detection in Python: Part One
-## Visualization and Unbalanced Classes
+# Visualization and Unbalanced Classes
 
 ![png]({static}/images/pca_fraud_title.png)
 
