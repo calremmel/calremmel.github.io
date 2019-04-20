@@ -9,7 +9,7 @@ modified: 2019-04-20
 
 ![png]({static}/images/pca_fraud_title.png)
 
-Fraud detection is an important area of business where machine learning techniques have a particularly powerful use case. While fraud detection as a discipline predates the widespread popularity of machine learning, traditional techniques rely primarily on rules of thumb for flagging potentially fraudulent behaviour. These rules can yield impressive results, but they cannot deal with interactions between different variables or improve over time the way a machine learning model can.
+Fraud detection is an important area of business where machine learning techniques have a particularly powerful use case. While fraud detection as a discipline predates the widespread popularity of machine learning, traditional techniques rely primarily on rules of thumb for flagging potentially fraudulent behavior. These rules can yield impressive results, but they cannot deal with interactions between different variables or improve over time the way a machine learning model can.
 
 This is part one in a multi-part deep dive into the latest and greatest in fraud detection techniques using machine learning in the Python programming language. I'll be going through the very latest methods for predicting rare events like fraud, starting from the basics and proceeding through the cutting edge.
 
@@ -17,7 +17,7 @@ This series will be a set of living documents, and I will be updating them as mu
 
 # Visualizing Fraud
 
-Part of what makes it so difficult to detect fraud is that **fraud is rare.** Within any given dataset of transactions, there will usually be far more legitimate cases than fraudulent ones. This makes it difficult to build a profile for what might distiguish fraud from non-fraud, and it makes it very difficult to avoid flagging legitimate transactions as fraud inadvertently when you try.
+Part of what makes it so difficult to detect fraud is that **fraud is rare.** Within any given dataset of transactions, there will usually be far more legitimate cases than fraudulent ones. This makes it difficult to build a profile for what might distinguish fraud from non-fraud, and it makes it very difficult to avoid flagging legitimate transactions as fraud inadvertently when you try.
 
 To get a sense of this, it is useful to have a way to visualize the frequency of fraud versus non-fraud. That's where we'll start.
 
@@ -193,7 +193,7 @@ This is a large dataset with well over six-million entries. Let's have a look at
 * **isFraud** - This is the transactions made by the fraudulent agents inside the simulation. In this specific dataset the fraudulent behavior of the agents aims to profit by taking control or customers accounts and try to empty the funds by transferring to another account and then cashing out of the system.
 * **isFlaggedFraud** - The business model aims to control massive transfers from one account to another and flags illegal attempts. An illegal attempt in this dataset is an attempt to transfer more than 200.000 in a single transaction.
 
-It appears that part of our task will be to improve as much on `isFlaggedFraud` as possible. This is ideal, as it represents a typical rules-based heuristic for identifying fraud, and this is ecactly the kind of benchmark we want to show we can outperform. We'll have a look at exactly how well they did at a later point in the series.
+It appears that part of our task will be to improve as much on `isFlaggedFraud` as possible. This is ideal, as it represents a typical rules-based heuristic for identifying fraud, and this is exactly the kind of benchmark we want to show we can outperform. We'll have a look at exactly how well they did at a later point in the series.
 
 Next question: How many and what percentage of these entries are fraud?
 
@@ -229,7 +229,8 @@ counts / df.shape[0]
 Herein lies the central problem: only a little over **.1%** of these entries are fraudulent.
 
 In order to make this more visually apparent, we'll use the following process:
-1. We'll take a large random sample from the dataset. I've learned from hard experience that plotting millions of points on your home laptop can take a good long while otherwise.
+
+1. We'll take a large random sample from the dataset. I've learned from hard experience that plotting millions of points on your home laptop can take a good long while otherwise
 2. We'll drop `nameOrig` and `nameDest` for now. These may be useful for modeling at a later point, but they will require some transformation, and for now we just want to get a sense of scale
 3. We'll transform the `type` column into numeric dummy variables, so as to be able to include this information in our modeling
 4. We'll reduce the dataset into two dimensions using Principal Component Analysis for plotting
@@ -369,7 +370,7 @@ As we've seen, one of the central challenges in fraud detection is that cases of
 The way we deal with imbalanced classes is through **resampling,** which covers an array of techniques for making the ratio of classes more equitable. These techniques may be broadly separated into three categories:
 
 1. **Random Under-Sampling (RUS):**
-    * Take a random sample of the majority class and train the model on the sample combined with the entirity of the minority class
+    * Take a random sample of the majority class and train the model on the sample combined with the entirety of the minority class
 2. **Random Over-Sampling (ROS):**
     * Randomly sample from the minority class *with replacement* until the sizes of both classes match
 3. **Synthetic Minority Over-sampling Technique (SMOTE):**
@@ -379,7 +380,7 @@ How to choose? **RUS** may be appropriate when there is a large enough populatio
 
 For over-sampling techniques, given that our cases of fraud are similar enough to each other that KNN might produce good representative data, **SMOTE** could also produce good results. If our fraud cases were more spread out, creating synthetic data using KNN could produce wildly unrepresentative noise, throwing the model off.
 
-If there is a situation where **ROS** would be preferable to both RUS and SMOTE, I'm not sure what that is! Training the model on duplicate data is a huge drawback, and could lead to serious overfitting on very specific datapoints.
+If there is a situation where **ROS** would be preferable to both RUS and SMOTE, I'm not sure what that is! Training the model on duplicate data is a huge drawback, and could lead to serious overfitting on very specific data points.
 
 In our case, as both **RUS** and **SMOTE** are solid options, we will try them both.
 

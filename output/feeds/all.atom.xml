@@ -26,25 +26,115 @@
 
 
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;df&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;pd&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;read_csv&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;../data/raw/PS_20174392719_1491204439457_log.csv&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;head&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt;
+&lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;head&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;   step      type    amount     nameOrig  oldbalanceOrg  newbalanceOrig  \
-0     1   PAYMENT   9839.64  C1231006815       170136.0       160296.36   
-1     1   PAYMENT   1864.28  C1666544295        21249.0        19384.72   
-2     1  TRANSFER    181.00  C1305486145          181.0            0.00   
-3     1  CASH_OUT    181.00   C840083671          181.0            0.00   
-4     1   PAYMENT  11668.14  C2048537720        41554.0        29885.86
+&lt;div&gt;
+&lt;style scoped&gt;
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
-      nameDest  oldbalanceDest  newbalanceDest  isFraud  isFlaggedFraud  
-0  M1979787155             0.0             0.0        0               0  
-1  M2044282225             0.0             0.0        0               0  
-2   C553264065             0.0             0.0        1               0  
-3    C38997010         21182.0             0.0        1               0  
-4  M1230701703             0.0             0.0        0               0
-&lt;/pre&gt;&lt;/div&gt;
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
 
+    .dataframe thead th {
+        text-align: right;
+    }
+&lt;/style&gt;
+&lt;table border="1" class="dataframe"&gt;
+  &lt;thead&gt;
+    &lt;tr style="text-align: right;"&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;step&lt;/th&gt;
+      &lt;th&gt;type&lt;/th&gt;
+      &lt;th&gt;amount&lt;/th&gt;
+      &lt;th&gt;nameOrig&lt;/th&gt;
+      &lt;th&gt;oldbalanceOrg&lt;/th&gt;
+      &lt;th&gt;newbalanceOrig&lt;/th&gt;
+      &lt;th&gt;nameDest&lt;/th&gt;
+      &lt;th&gt;oldbalanceDest&lt;/th&gt;
+      &lt;th&gt;newbalanceDest&lt;/th&gt;
+      &lt;th&gt;isFraud&lt;/th&gt;
+      &lt;th&gt;isFlaggedFraud&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;th&gt;0&lt;/th&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;PAYMENT&lt;/td&gt;
+      &lt;td&gt;9839.64&lt;/td&gt;
+      &lt;td&gt;C1231006815&lt;/td&gt;
+      &lt;td&gt;170136.0&lt;/td&gt;
+      &lt;td&gt;160296.36&lt;/td&gt;
+      &lt;td&gt;M1979787155&lt;/td&gt;
+      &lt;td&gt;0.0&lt;/td&gt;
+      &lt;td&gt;0.0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;1&lt;/th&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;PAYMENT&lt;/td&gt;
+      &lt;td&gt;1864.28&lt;/td&gt;
+      &lt;td&gt;C1666544295&lt;/td&gt;
+      &lt;td&gt;21249.0&lt;/td&gt;
+      &lt;td&gt;19384.72&lt;/td&gt;
+      &lt;td&gt;M2044282225&lt;/td&gt;
+      &lt;td&gt;0.0&lt;/td&gt;
+      &lt;td&gt;0.0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;2&lt;/th&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;TRANSFER&lt;/td&gt;
+      &lt;td&gt;181.00&lt;/td&gt;
+      &lt;td&gt;C1305486145&lt;/td&gt;
+      &lt;td&gt;181.0&lt;/td&gt;
+      &lt;td&gt;0.00&lt;/td&gt;
+      &lt;td&gt;C553264065&lt;/td&gt;
+      &lt;td&gt;0.0&lt;/td&gt;
+      &lt;td&gt;0.0&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;3&lt;/th&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;CASH_OUT&lt;/td&gt;
+      &lt;td&gt;181.00&lt;/td&gt;
+      &lt;td&gt;C840083671&lt;/td&gt;
+      &lt;td&gt;181.0&lt;/td&gt;
+      &lt;td&gt;0.00&lt;/td&gt;
+      &lt;td&gt;C38997010&lt;/td&gt;
+      &lt;td&gt;21182.0&lt;/td&gt;
+      &lt;td&gt;0.0&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;4&lt;/th&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;PAYMENT&lt;/td&gt;
+      &lt;td&gt;11668.14&lt;/td&gt;
+      &lt;td&gt;C2048537720&lt;/td&gt;
+      &lt;td&gt;41554.0&lt;/td&gt;
+      &lt;td&gt;29885.86&lt;/td&gt;
+      &lt;td&gt;M1230701703&lt;/td&gt;
+      &lt;td&gt;0.0&lt;/td&gt;
+      &lt;td&gt;0.0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
 
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;info&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
