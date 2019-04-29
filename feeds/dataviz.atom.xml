@@ -1,5 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Chris Remmel - dataviz</title><link href="/" rel="alternate"></link><link href="/feeds/dataviz.atom.xml" rel="self"></link><id>/</id><updated>2019-04-05T00:00:00-04:00</updated><entry><title>Heatmap Color Labels in Seaborn</title><link href="/heatmap-color-labels-in-seaborn.html" rel="alternate"></link><published>2019-04-05T00:00:00-04:00</published><updated>2019-04-05T00:00:00-04:00</updated><author><name>Chris Remmel</name></author><id>tag:None,2019-04-05:/heatmap-color-labels-in-seaborn.html</id><summary type="html">&lt;h1&gt;Multiple Layers of Color Labels in Seaborn Heatmaps&lt;/h1&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Chris Remmel - dataviz</title><link href="/" rel="alternate"></link><link href="/feeds/dataviz.atom.xml" rel="self"></link><id>/</id><updated>2019-04-29T00:00:00-04:00</updated><entry><title>Automatic activity tracking with Google Sheets, PeriodIndex, and matplotlib</title><link href="/activity-tracking.html" rel="alternate"></link><published>2019-04-29T00:00:00-04:00</published><updated>2019-04-29T00:00:00-04:00</updated><author><name>Chris Remmel</name></author><id>tag:None,2019-04-29:/activity-tracking.html</id><summary type="html">&lt;p&gt;There's a lot to keep track of during the job search process, and last week I decided it would be nice to have an easy, automatic way to visualize my job search activity from week to week.&lt;/p&gt;
+&lt;p&gt;I've been tracking my efforts using Google Sheets, and wanted to be able …&lt;/p&gt;</summary><content type="html">&lt;p&gt;There's a lot to keep track of during the job search process, and last week I decided it would be nice to have an easy, automatic way to visualize my job search activity from week to week.&lt;/p&gt;
+&lt;p&gt;I've been tracking my efforts using Google Sheets, and wanted to be able to get an updated visualization drawing directly from the online worksheet by running a script. After a morning of work, I found a solution that would allow me to use Google Sheets as a database, and get updated visualizations using Python and &lt;code&gt;matplotlib&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Here is the result!&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Job Search Image" src="/images/2019-04-26-report.png"&gt;&lt;/p&gt;
+&lt;p&gt;If you would like to set up something similar for yourself, &lt;em&gt;read on.&lt;/em&gt;&lt;/p&gt;
+&lt;h2&gt;Using Google Sheets as a Database&lt;/h2&gt;
+&lt;p&gt;In order to use Google Sheets to track your activities you'll need:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;OAuth2 credentials from the Google Developers Console. &lt;a href=""&gt;You may find a guide for this part by clicking here.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;The &lt;code&gt;gspread&lt;/code&gt; library in order to get the updated activity tracking worksheet from Google Sheets as a pandas DataFrame&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;To follow along with this example, the tracking sheet itself is only required to have two columns:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Date&lt;/code&gt; - the date the job search activity took place&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Action&lt;/code&gt; - the kind of action taken&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Importing Libraries&lt;/h2&gt;
+&lt;p&gt;This first code cell imports the necessary libraries, including &lt;code&gt;datetime&lt;/code&gt; which we will need in order to automatically timestamp our plot's filename, and sets the global style for the final plot.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;pandas&lt;/span&gt; &lt;span class="kn"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;pd&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;numpy&lt;/span&gt; &lt;span class="kn"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;np&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;matplotlib.pyplot&lt;/span&gt; &lt;span class="kn"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;plt&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;gspread&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;datetime&lt;/span&gt;
+
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;oauth2client.service_account&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;ServiceAccountCredentials&lt;/span&gt;
+
+&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;style&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;use&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;seaborn&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Connecting to Google Sheets&lt;/h2&gt;
+&lt;p&gt;This cell connects to the Google Drive API using the &lt;code&gt;gspread&lt;/code&gt; Client object. &lt;code&gt;activity_sheet&lt;/code&gt; contains the exact name of the worksheet that contains the &lt;code&gt;Date&lt;/code&gt; and &lt;code&gt;Action&lt;/code&gt; columns.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;scope&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;https://spreadsheets.google.com/feeds&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+         &lt;span class="s1"&gt;&amp;#39;https://www.googleapis.com/auth/drive&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="n"&gt;creds&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;ServiceAccountCredentials&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;from_json_keyfile_name&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;../data/job_search_creds.json&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;scope&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;gc&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;gspread&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;authorize&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;creds&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;activity_sheet&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Name of Activity Tracking Sheet&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Retrieving Activity Worksheet&lt;/h2&gt;
+&lt;p&gt;This function uses the &lt;code&gt;gspread&lt;/code&gt; Client to retrieve the activity worksheet and converts it into a pandas DataFrame.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;get_activity&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;gc&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;Returns worksheet from connected workbook.&lt;/span&gt;
+
+&lt;span class="sd"&gt;    Args:&lt;/span&gt;
+&lt;span class="sd"&gt;        gc (Client): gspread client object&lt;/span&gt;
+&lt;span class="sd"&gt;        worksheet (str): Name of worksheet&lt;/span&gt;
+&lt;span class="sd"&gt;    Returns:&lt;/span&gt;
+&lt;span class="sd"&gt;        df (DataFrame): Worksheet as pandas DataFrame&lt;/span&gt;
+&lt;span class="sd"&gt;    &amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+    &lt;span class="n"&gt;book&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;gc&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;open&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;job_search&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;book&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_worksheet&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;js_vals&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;job_search&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_all_values&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="n"&gt;df&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;pd&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;DataFrame&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;js_vals&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;:],&lt;/span&gt; &lt;span class="n"&gt;columns&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;js_vals&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;df&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Using a Period Index&lt;/h2&gt;
+&lt;p&gt;This function does a few important things that bear some explanation:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;It converts the &lt;code&gt;Date&lt;/code&gt; column to the &lt;code&gt;datetime&lt;/code&gt; data type, and sets it as the index of the DataFrame&lt;/li&gt;
+&lt;li&gt;It then converts the the &lt;code&gt;DatetimeIndex&lt;/code&gt; to a &lt;a href="https://pandas.pydata.org/pandas-docs/version/0.23.4/generated/pandas.PeriodIndex.html"&gt;PeriodIndex&lt;/a&gt;, which allows us to group our actions by week rather than by individual day when we pass in &lt;code&gt;freq="W"&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;It converts our &lt;code&gt;Action&lt;/code&gt; column into dummy variables for each category of action, and then sums the counts of each category by week&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The nice thing about building the function this way, is that if you add a new kind of action -- say you decide you want to start tracking &lt;code&gt;Blog Post&lt;/code&gt; as a category so you know how many posts you publish weekly -- this will automatically update without you having to write any new code.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;get_weekly_counts&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;target&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;dates&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Date&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;Gets weekly counts of categorical column in DataFrame containing a column of dates.&lt;/span&gt;
+
+&lt;span class="sd"&gt;    Args:&lt;/span&gt;
+&lt;span class="sd"&gt;        df (DataFrame): DataFrame containing target and date columns&lt;/span&gt;
+&lt;span class="sd"&gt;        target (str): Column containing categories to be counted&lt;/span&gt;
+&lt;span class="sd"&gt;        dates (str): Column of dates&lt;/span&gt;
+&lt;span class="sd"&gt;    Returns:&lt;/span&gt;
+&lt;span class="sd"&gt;        counts (DataFrame): DataFrame of weekly counts&lt;/span&gt;
+&lt;span class="sd"&gt;    &amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+    &lt;span class="n"&gt;df&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;set_index&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;pd&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;to_datetime&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Date&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;drop&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Date&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;axis&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;weekly&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;to_period&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;freq&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;W&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;actions&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;pd&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_dummies&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;weekly&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;target&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+    &lt;span class="n"&gt;counts&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;actions&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;groupby&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;actions&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;index&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sum&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;counts&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The returned &lt;code&gt;counts&lt;/code&gt; DataFrame ends up looking like this:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Counts Example" src="/images/counts-example.PNG"&gt;&lt;/p&gt;
+&lt;h2&gt;Making the Plot&lt;/h2&gt;
+&lt;p&gt;At long last, we are ready to produce and save the final plot. We make the stacked area plot using the &lt;code&gt;.plot.area()&lt;/code&gt; pandas DataFrame method, and then customize it using &lt;code&gt;matplotlib&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Thanks to &lt;code&gt;datetime.datetime.now()&lt;/code&gt;, we have an automatic naming scheme for our saved files, which both keeps us from overwriting past plots and makes it easy to see in-folder how things have progressed over time.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;plot_report&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;counts&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;Plots job search activity and saves .png to reports folder.&lt;/span&gt;
+
+&lt;span class="sd"&gt;    Args:&lt;/span&gt;
+&lt;span class="sd"&gt;        counts (DataFrame): DataFrame of activity counts by period&lt;/span&gt;
+&lt;span class="sd"&gt;    &amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+    &lt;span class="c1"&gt;# Get current date for filename&lt;/span&gt;
+    &lt;span class="n"&gt;now&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;datetime&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;datetime&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;now&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="n"&gt;time_string&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;now&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;strftime&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;%Y-%m-&lt;/span&gt;&lt;span class="si"&gt;%d&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="n"&gt;counts&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;area&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Job Search Dashboard&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ylabel&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;# Actions Taken&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;xlabel&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Week&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;tight_layout&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="c1"&gt;# These next two lines mark when I personally started my job search&lt;/span&gt;
+    &lt;span class="c1"&gt;# You can remove them without consequence&lt;/span&gt;
+    &lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;axvline&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;4/1/2019&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;c&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;r&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;4/1/2019&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;  Job search start&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;fontdict&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;size&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;})&lt;/span&gt;
+    &lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;savefig&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;../reports/{}-report.png&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;format&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;time_string&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+    &lt;span class="k"&gt;pass&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Calling the Functions&lt;/h2&gt;
+&lt;p&gt;Thanks to our hard work from earlier, all we need to do to generate a new plot which automatically incorporates any changes we've made to our Google Sheet is run the following three lines of code:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;df&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;get_activity&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;gc&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;activity_sheet&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;counts&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;get_weekly_counts&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Action&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;plot_report&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;counts&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;img alt="Job Search Image" src="/images/2019-04-26-report.png"&gt;&lt;/p&gt;
+&lt;h2&gt;Celebration Time&lt;/h2&gt;
+&lt;p&gt;And there you have it! A nice plot that displays weekly activity counts, drawing updates from Google Sheets. This workflow can be used to make any kind of plot using Google Sheets as a kind of lightweight database. Experiment, edit, and enjoy!&lt;/p&gt;</content></entry><entry><title>Heatmap Color Labels in Seaborn</title><link href="/heatmap-color-labels-in-seaborn.html" rel="alternate"></link><published>2019-04-05T00:00:00-04:00</published><updated>2019-04-05T00:00:00-04:00</updated><author><name>Chris Remmel</name></author><id>tag:None,2019-04-05:/heatmap-color-labels-in-seaborn.html</id><summary type="html">&lt;h1&gt;Multiple Layers of Color Labels in Seaborn Heatmaps&lt;/h1&gt;
 &lt;p&gt;I'm currently working with biological test data, which by its nature tends to have a large number of features. This presents all sorts of challenges, not least of which is the difficulty in interpreting correlation heatmaps when there are so many rows …&lt;/p&gt;</summary><content type="html">&lt;h1&gt;Multiple Layers of Color Labels in Seaborn Heatmaps&lt;/h1&gt;
 &lt;p&gt;I'm currently working with biological test data, which by its nature tends to have a large number of features. This presents all sorts of challenges, not least of which is the difficulty in interpreting correlation heatmaps when there are so many rows and columns that the labels become impossible to read!&lt;/p&gt;
 &lt;p&gt;One solution to this problem is to group the features into categories, assign each category a color, and annotate the rows and columns of a heatmap. For a toy example of this using a more manageable non-biological dataset, consider the following:&lt;/p&gt;
