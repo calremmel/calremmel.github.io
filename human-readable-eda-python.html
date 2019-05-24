@@ -77,7 +77,8 @@
           </h2>
         </header>
       <div class="content">
-         <h1>Why Pipes are Great</h1>
+         <p><img alt="jpg" src="/images/TidyPipe.jpg"></p>
+<h1>Why Pipes are Great</h1>
 <p>I've been working with a team whose computational work is done primarily in R. Python is my primary language and I remain much more comfortable with its scientific stack of tools, but as I've gotten to know <code>ggplot2</code> and the <code>tidyverse</code> ecosystem of tools in R, I've been finding myself wishing that I could come up with something a little closer to that workflow in Python.</p>
 <p>One of the major things I like about how code is written within the <code>tidyverse</code> is the central importance of the pipe command: <code>%&gt;%</code>. In R, just about every transformation you want to apply to data is going to be done through a function. If you want to apply many transformations, this can quickly lead to lots of nested functions, which can be cumbersome to read and unpleasant to edit -- unless you love counting parenthesis!</p>
 <p>The beauty of the pipe is that it takes the output of its line and passes it as the first argument into the function that appears on the next line of code. By way of example, let's say you have a DataFrame <code>finances</code> with columns <code>year</code> and <code>revenue</code>, and you want to get the total revenue for each year after 2008. Without the pipe, that code might look like this:</p>
