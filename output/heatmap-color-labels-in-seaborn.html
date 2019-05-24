@@ -4,30 +4,28 @@
           <title>Chris Remmel</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta charset="utf-8" />
-        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Chris Remmel Full Atom Feed" />
-        <link href="/feeds/dataviz.atom.xml" type="application/atom+xml" rel="alternate" title="Chris Remmel Categories Atom Feed" />
         <!-- twitter card metadata -->
 <meta name="twitter:site" content="@chrisremmel">
 <meta name="twitter:title" content="Heatmap Color Labels in Seaborn">
 <meta name="twitter:description" content="">
         <!-- OG Tags -->
-<meta property="og:url" content="/heatmap-color-labels-in-seaborn.html"/>
+<meta property="og:url" content="https://calremmel.github.io/heatmap-color-labels-in-seaborn.html"/>
 <meta property="og:title" content="Chris Remmel | Heatmap Color Labels in Seaborn" />
 <meta property="og:description" content="" />
         <!-- favicon -->
         <!-- moment.js for date formatting -->
-        <script src="/theme/js/moment.js"></script>
+        <script src="https://calremmel.github.io/theme/js/moment.js"></script>
         <!-- css -->
-        <link rel="stylesheet" type="text/css" href="/theme/css/main.css" />
+        <link rel="stylesheet" type="text/css" href="https://calremmel.github.io/theme/css/main.css" />
 		<script>
 			
                 /*! grunt-grunticon Stylesheet Loader - v2.1.2 | https://github.com/filamentgroup/grunticon | (c) 2015 Scott Jehl, Filament Group, Inc. | MIT license. */
     
     (function(e){function t(t,n,r,o){"use strict";function a(){for(var e,n=0;u.length>n;n++)u[n].href&&u[n].href.indexOf(t)>-1&&(e=!0);e?i.media=r||"all":setTimeout(a)}var i=e.document.createElement("link"),l=n||e.document.getElementsByTagName("script")[0],u=e.document.styleSheets;return i.rel="stylesheet",i.href=t,i.media="only x",i.onload=o||null,l.parentNode.insertBefore(i,l),a(),i}var n=function(r,o){"use strict";if(r&&3===r.length){var a=e.navigator,i=e.Image,l=!(!document.createElementNS||!document.createElementNS("http://www.w3.org/2000/svg","svg").createSVGRect||!document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#Image","1.1")||e.opera&&-1===a.userAgent.indexOf("Chrome")||-1!==a.userAgent.indexOf("Series40")),u=new i;u.onerror=function(){n.method="png",n.href=r[2],t(r[2])},u.onload=function(){var e=1===u.width&&1===u.height,a=r[e&&l?0:e?1:2];n.method=e&&l?"svg":e?"datapng":"png",n.href=a,t(a,null,null,o)},u.src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==",document.documentElement.className+=" grunticon"}};n.loadCSS=t,e.grunticon=n})(this);(function(e,t){"use strict";var n=t.document,r="grunticon:",o=function(e){if(n.attachEvent?"complete"===n.readyState:"loading"!==n.readyState)e();else{var t=!1;n.addEventListener("readystatechange",function(){t||(t=!0,e())},!1)}},a=function(e){return t.document.querySelector('link[href$="'+e+'"]')},c=function(e){var t,n,o,a,c,i,u={};if(t=e.sheet,!t)return u;n=t.cssRules?t.cssRules:t.rules;for(var l=0;n.length>l;l++)o=n[l].cssText,a=r+n[l].selectorText,c=o.split(");")[0].match(/US\-ASCII\,([^"']+)/),c&&c[1]&&(i=decodeURIComponent(c[1]),u[a]=i);return u},i=function(e){var t,o,a;o="data-grunticon-embed";for(var c in e)if(a=c.slice(r.length),t=n.querySelectorAll(a+"["+o+"]"),t.length)for(var i=0;t.length>i;i++)t[i].innerHTML=e[c],t[i].style.backgroundImage="none",t[i].removeAttribute(o);return t},u=function(t){"svg"===e.method&&o(function(){i(c(a(e.href))),"function"==typeof t&&t()})};e.embedIcons=i,e.getCSS=a,e.getIcons=c,e.ready=o,e.svgLoadedCallback=u,e.embedSVG=u})(grunticon,this);
                 
-                grunticon(["/theme/css/icons.data.svg.css", "/theme/css/icons.data.png.css", "/theme/css/icons.fallback.css"]);
+                grunticon(["https://calremmel.github.io/theme/css/icons.data.svg.css", "https://calremmel.github.io/theme/css/icons.data.png.css", "https://calremmel.github.io/theme/css/icons.fallback.css"]);
             </script>
-        <noscript><link href="/theme/css/icons.fallback.css" rel="stylesheet"></noscript>
+        <noscript><link href="https://calremmel.github.io/theme/css/icons.fallback.css" rel="stylesheet"></noscript>
         <!-- menu toggle javascript -->
         <script type="text/javascript">
             document.addEventListener("DOMContentLoaded", initMenu);
@@ -53,9 +51,9 @@
             <a href="#menu" id="menu-link">more stuff</a>
             <nav id="menu">
                 <ul>
-                            <li class="active"><a href="/category/dataviz.html">dataviz</a></li>
-                            <li><a href="/category/fraud-detection.html">fraud-detection</a></li>
-                            <li><a href="/category/project.html">project</a></li>
+                            <li class="active"><a href="https://calremmel.github.io/category/dataviz.html">dataviz</a></li>
+                            <li><a href="https://calremmel.github.io/category/fraud-detection.html">fraud-detection</a></li>
+                            <li><a href="https://calremmel.github.io/category/project.html">project</a></li>
                 </ul>
             </nav>
         </header>
@@ -80,7 +78,7 @@
          <h1>Multiple Layers of Color Labels in Seaborn Heatmaps</h1>
 <p>I'm currently working with biological test data, which by its nature tends to have a large number of features. This presents all sorts of challenges, not least of which is the difficulty in interpreting correlation heatmaps when there are so many rows and columns that the labels become impossible to read!</p>
 <p>One solution to this problem is to group the features into categories, assign each category a color, and annotate the rows and columns of a heatmap. For a toy example of this using a more manageable non-biological dataset, consider the following:</p>
-<p><img alt="Heatmap One" src="/images/heatmap_one.png"></p>
+<p><img alt="Heatmap One" src="https://calremmel.github.io/images/heatmap_one.png"></p>
 <p>This is a nice way to interpret the correlation heatmap of a large dataset, as the column and row colors allow you to identify useful clusters by sight. What if, however, each feature has not just one useful attribute for grouping, but two? For those working in life sciences, you might take the example of wanting to be able to know both reagent and antigen by sight.</p>
 <p>Fortunately, seaborn makes this easy as well. Let's work through an example using the Residential Building Data Set from the UCI Machine Learning Library.</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
@@ -487,7 +485,7 @@
 </pre></div>
 
 
-<p><img alt="png" src="/images/output_15_0.png"></p>
+<p><img alt="png" src="https://calremmel.github.io/images/output_15_0.png"></p>
 <p>Very nice! In order to assign these colors to categories, seaborn will want a Series with the colors as values, and the associated features as index labels. Let's create that.</p>
 <div class="highlight"><pre><span></span><span class="c1"># Create dictionary with features as keys and colors as values</span>
 <span class="n">color_dict</span> <span class="o">=</span> <span class="p">{}</span>
@@ -520,7 +518,7 @@ dtype: object
 </pre></div>
 
 
-<p><img alt="png" src="/images/output_19_1.png"></p>
+<p><img alt="png" src="https://calremmel.github.io/images/output_19_1.png"></p>
 <p>Very nice. Now, let's add a second layer. We might also want to know at sight what kind measurement each feature contains. Let's have a look at the data dictionary in order to determine this.</p>
 <div class="highlight"><pre><span></span><span class="c1"># Load the data dictionary in the second page of the Excel file</span>
 <span class="n">desc</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;data/raw/Residential-Building-Data-Set.xlsx&#39;</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -718,7 +716,7 @@ Name: Color, dtype: object
 </pre></div>
 
 
-<p><img alt="png" src="/images/output_30_1.png"></p>
+<p><img alt="png" src="https://calremmel.github.io/images/output_30_1.png"></p>
 <p>Voila! Two layers of row and column colors, for easy interpretation of feature clusters by groups.</p>
 <p>In my next post, I'll cover how to make custom legends for these color labels using matplotlib. Thanks for reading, and stay tuned!</p>
       </div>

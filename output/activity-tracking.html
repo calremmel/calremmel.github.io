@@ -4,30 +4,28 @@
           <title>Chris Remmel</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta charset="utf-8" />
-        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Chris Remmel Full Atom Feed" />
-        <link href="/feeds/dataviz.atom.xml" type="application/atom+xml" rel="alternate" title="Chris Remmel Categories Atom Feed" />
         <!-- twitter card metadata -->
 <meta name="twitter:site" content="@chrisremmel">
 <meta name="twitter:title" content="Automatic activity tracking with Google Sheets, PeriodIndex, and matplotlib">
 <meta name="twitter:description" content="">
         <!-- OG Tags -->
-<meta property="og:url" content="/activity-tracking.html"/>
+<meta property="og:url" content="https://calremmel.github.io/activity-tracking.html"/>
 <meta property="og:title" content="Chris Remmel | Automatic activity tracking with Google Sheets, PeriodIndex, and matplotlib" />
 <meta property="og:description" content="" />
         <!-- favicon -->
         <!-- moment.js for date formatting -->
-        <script src="/theme/js/moment.js"></script>
+        <script src="https://calremmel.github.io/theme/js/moment.js"></script>
         <!-- css -->
-        <link rel="stylesheet" type="text/css" href="/theme/css/main.css" />
+        <link rel="stylesheet" type="text/css" href="https://calremmel.github.io/theme/css/main.css" />
 		<script>
 			
                 /*! grunt-grunticon Stylesheet Loader - v2.1.2 | https://github.com/filamentgroup/grunticon | (c) 2015 Scott Jehl, Filament Group, Inc. | MIT license. */
     
     (function(e){function t(t,n,r,o){"use strict";function a(){for(var e,n=0;u.length>n;n++)u[n].href&&u[n].href.indexOf(t)>-1&&(e=!0);e?i.media=r||"all":setTimeout(a)}var i=e.document.createElement("link"),l=n||e.document.getElementsByTagName("script")[0],u=e.document.styleSheets;return i.rel="stylesheet",i.href=t,i.media="only x",i.onload=o||null,l.parentNode.insertBefore(i,l),a(),i}var n=function(r,o){"use strict";if(r&&3===r.length){var a=e.navigator,i=e.Image,l=!(!document.createElementNS||!document.createElementNS("http://www.w3.org/2000/svg","svg").createSVGRect||!document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#Image","1.1")||e.opera&&-1===a.userAgent.indexOf("Chrome")||-1!==a.userAgent.indexOf("Series40")),u=new i;u.onerror=function(){n.method="png",n.href=r[2],t(r[2])},u.onload=function(){var e=1===u.width&&1===u.height,a=r[e&&l?0:e?1:2];n.method=e&&l?"svg":e?"datapng":"png",n.href=a,t(a,null,null,o)},u.src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==",document.documentElement.className+=" grunticon"}};n.loadCSS=t,e.grunticon=n})(this);(function(e,t){"use strict";var n=t.document,r="grunticon:",o=function(e){if(n.attachEvent?"complete"===n.readyState:"loading"!==n.readyState)e();else{var t=!1;n.addEventListener("readystatechange",function(){t||(t=!0,e())},!1)}},a=function(e){return t.document.querySelector('link[href$="'+e+'"]')},c=function(e){var t,n,o,a,c,i,u={};if(t=e.sheet,!t)return u;n=t.cssRules?t.cssRules:t.rules;for(var l=0;n.length>l;l++)o=n[l].cssText,a=r+n[l].selectorText,c=o.split(");")[0].match(/US\-ASCII\,([^"']+)/),c&&c[1]&&(i=decodeURIComponent(c[1]),u[a]=i);return u},i=function(e){var t,o,a;o="data-grunticon-embed";for(var c in e)if(a=c.slice(r.length),t=n.querySelectorAll(a+"["+o+"]"),t.length)for(var i=0;t.length>i;i++)t[i].innerHTML=e[c],t[i].style.backgroundImage="none",t[i].removeAttribute(o);return t},u=function(t){"svg"===e.method&&o(function(){i(c(a(e.href))),"function"==typeof t&&t()})};e.embedIcons=i,e.getCSS=a,e.getIcons=c,e.ready=o,e.svgLoadedCallback=u,e.embedSVG=u})(grunticon,this);
                 
-                grunticon(["/theme/css/icons.data.svg.css", "/theme/css/icons.data.png.css", "/theme/css/icons.fallback.css"]);
+                grunticon(["https://calremmel.github.io/theme/css/icons.data.svg.css", "https://calremmel.github.io/theme/css/icons.data.png.css", "https://calremmel.github.io/theme/css/icons.fallback.css"]);
             </script>
-        <noscript><link href="/theme/css/icons.fallback.css" rel="stylesheet"></noscript>
+        <noscript><link href="https://calremmel.github.io/theme/css/icons.fallback.css" rel="stylesheet"></noscript>
         <!-- menu toggle javascript -->
         <script type="text/javascript">
             document.addEventListener("DOMContentLoaded", initMenu);
@@ -53,9 +51,9 @@
             <a href="#menu" id="menu-link">more stuff</a>
             <nav id="menu">
                 <ul>
-                            <li class="active"><a href="/category/dataviz.html">dataviz</a></li>
-                            <li><a href="/category/fraud-detection.html">fraud-detection</a></li>
-                            <li><a href="/category/project.html">project</a></li>
+                            <li class="active"><a href="https://calremmel.github.io/category/dataviz.html">dataviz</a></li>
+                            <li><a href="https://calremmel.github.io/category/fraud-detection.html">fraud-detection</a></li>
+                            <li><a href="https://calremmel.github.io/category/project.html">project</a></li>
                 </ul>
             </nav>
         </header>
@@ -80,7 +78,7 @@
          <p>There's a lot to keep track of during the job search process, and last week I decided it would be nice to have an easy, automatic way to visualize my job search activity from week to week.</p>
 <p>I've been tracking my efforts using Google Sheets, and wanted to be able to get an updated visualization drawing directly from the online worksheet by running a script. After a morning of work, I found a solution that would allow me to use Google Sheets as a database, and get updated visualizations using Python and <code>matplotlib</code>.</p>
 <p>Here is the result!</p>
-<p><img alt="Job Search Image" src="/images/2019-04-26-report.png"></p>
+<p><img alt="Job Search Image" src="https://calremmel.github.io/images/2019-04-26-report.png"></p>
 <p>If you would like to set up something similar for yourself, <em>read on.</em></p>
 <h2>Using Google Sheets as a Database</h2>
 <p>In order to use Google Sheets to track your activities you'll need:</p>
@@ -163,7 +161,7 @@
 
 
 <p>The returned <code>counts</code> DataFrame ends up looking like this:</p>
-<p><img alt="Counts Example" src="/images/counts-example.PNG"></p>
+<p><img alt="Counts Example" src="https://calremmel.github.io/images/counts-example.PNG"></p>
 <h2>Making the Plot</h2>
 <p>At long last, we are ready to produce and save the final plot. We make the stacked area plot using the <code>.plot.area()</code> pandas DataFrame method, and then customize it using <code>matplotlib</code>.</p>
 <p>Thanks to <code>datetime.datetime.now()</code>, we have an automatic naming scheme for our saved files, which both keeps us from overwriting past plots and makes it easy to see in-folder how things have progressed over time.</p>
@@ -199,7 +197,7 @@
 </pre></div>
 
 
-<p><img alt="Job Search Image" src="/images/2019-04-26-report.png"></p>
+<p><img alt="Job Search Image" src="https://calremmel.github.io/images/2019-04-26-report.png"></p>
 <h2>Celebration Time</h2>
 <p>And there you have it! A nice plot that displays weekly activity counts, drawing updates from Google Sheets. This workflow can be used to make any kind of plot using Google Sheets as a kind of lightweight database. Experiment, edit, and enjoy!</p>
       </div>

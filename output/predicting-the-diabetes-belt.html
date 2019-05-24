@@ -4,30 +4,28 @@
           <title>Chris Remmel</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta charset="utf-8" />
-        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Chris Remmel Full Atom Feed" />
-        <link href="/feeds/project.atom.xml" type="application/atom+xml" rel="alternate" title="Chris Remmel Categories Atom Feed" />
         <!-- twitter card metadata -->
 <meta name="twitter:site" content="@chrisremmel">
 <meta name="twitter:title" content="Project Write-Up: Predicting the Diabetes Belt">
 <meta name="twitter:description" content="">
         <!-- OG Tags -->
-<meta property="og:url" content="/predicting-the-diabetes-belt.html"/>
+<meta property="og:url" content="https://calremmel.github.io/predicting-the-diabetes-belt.html"/>
 <meta property="og:title" content="Chris Remmel | Project Write-Up: Predicting the Diabetes Belt" />
 <meta property="og:description" content="" />
         <!-- favicon -->
         <!-- moment.js for date formatting -->
-        <script src="/theme/js/moment.js"></script>
+        <script src="https://calremmel.github.io/theme/js/moment.js"></script>
         <!-- css -->
-        <link rel="stylesheet" type="text/css" href="/theme/css/main.css" />
+        <link rel="stylesheet" type="text/css" href="https://calremmel.github.io/theme/css/main.css" />
 		<script>
 			
                 /*! grunt-grunticon Stylesheet Loader - v2.1.2 | https://github.com/filamentgroup/grunticon | (c) 2015 Scott Jehl, Filament Group, Inc. | MIT license. */
     
     (function(e){function t(t,n,r,o){"use strict";function a(){for(var e,n=0;u.length>n;n++)u[n].href&&u[n].href.indexOf(t)>-1&&(e=!0);e?i.media=r||"all":setTimeout(a)}var i=e.document.createElement("link"),l=n||e.document.getElementsByTagName("script")[0],u=e.document.styleSheets;return i.rel="stylesheet",i.href=t,i.media="only x",i.onload=o||null,l.parentNode.insertBefore(i,l),a(),i}var n=function(r,o){"use strict";if(r&&3===r.length){var a=e.navigator,i=e.Image,l=!(!document.createElementNS||!document.createElementNS("http://www.w3.org/2000/svg","svg").createSVGRect||!document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#Image","1.1")||e.opera&&-1===a.userAgent.indexOf("Chrome")||-1!==a.userAgent.indexOf("Series40")),u=new i;u.onerror=function(){n.method="png",n.href=r[2],t(r[2])},u.onload=function(){var e=1===u.width&&1===u.height,a=r[e&&l?0:e?1:2];n.method=e&&l?"svg":e?"datapng":"png",n.href=a,t(a,null,null,o)},u.src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==",document.documentElement.className+=" grunticon"}};n.loadCSS=t,e.grunticon=n})(this);(function(e,t){"use strict";var n=t.document,r="grunticon:",o=function(e){if(n.attachEvent?"complete"===n.readyState:"loading"!==n.readyState)e();else{var t=!1;n.addEventListener("readystatechange",function(){t||(t=!0,e())},!1)}},a=function(e){return t.document.querySelector('link[href$="'+e+'"]')},c=function(e){var t,n,o,a,c,i,u={};if(t=e.sheet,!t)return u;n=t.cssRules?t.cssRules:t.rules;for(var l=0;n.length>l;l++)o=n[l].cssText,a=r+n[l].selectorText,c=o.split(");")[0].match(/US\-ASCII\,([^"']+)/),c&&c[1]&&(i=decodeURIComponent(c[1]),u[a]=i);return u},i=function(e){var t,o,a;o="data-grunticon-embed";for(var c in e)if(a=c.slice(r.length),t=n.querySelectorAll(a+"["+o+"]"),t.length)for(var i=0;t.length>i;i++)t[i].innerHTML=e[c],t[i].style.backgroundImage="none",t[i].removeAttribute(o);return t},u=function(t){"svg"===e.method&&o(function(){i(c(a(e.href))),"function"==typeof t&&t()})};e.embedIcons=i,e.getCSS=a,e.getIcons=c,e.ready=o,e.svgLoadedCallback=u,e.embedSVG=u})(grunticon,this);
                 
-                grunticon(["/theme/css/icons.data.svg.css", "/theme/css/icons.data.png.css", "/theme/css/icons.fallback.css"]);
+                grunticon(["https://calremmel.github.io/theme/css/icons.data.svg.css", "https://calremmel.github.io/theme/css/icons.data.png.css", "https://calremmel.github.io/theme/css/icons.fallback.css"]);
             </script>
-        <noscript><link href="/theme/css/icons.fallback.css" rel="stylesheet"></noscript>
+        <noscript><link href="https://calremmel.github.io/theme/css/icons.fallback.css" rel="stylesheet"></noscript>
         <!-- menu toggle javascript -->
         <script type="text/javascript">
             document.addEventListener("DOMContentLoaded", initMenu);
@@ -53,9 +51,9 @@
             <a href="#menu" id="menu-link">more stuff</a>
             <nav id="menu">
                 <ul>
-                            <li><a href="/category/dataviz.html">dataviz</a></li>
-                            <li><a href="/category/fraud-detection.html">fraud-detection</a></li>
-                            <li class="active"><a href="/category/project.html">project</a></li>
+                            <li><a href="https://calremmel.github.io/category/dataviz.html">dataviz</a></li>
+                            <li><a href="https://calremmel.github.io/category/fraud-detection.html">fraud-detection</a></li>
+                            <li class="active"><a href="https://calremmel.github.io/category/project.html">project</a></li>
                 </ul>
             </nav>
         </header>
@@ -477,7 +475,7 @@
 
 <h1>Exploratory Data Analysis<a name="exploratory"></a></h1>
 <p>To begin my exploration, I wanted to identify any highly correlated features. I started by graphing a heatmap including only those features that had a <strong>correlation of .8 or greater</strong> with one or more features.</p>
-<p><img alt="heatmap" src="/images/corr_heatmap.png"></p>
+<p><img alt="heatmap" src="https://calremmel.github.io/images/corr_heatmap.png"></p>
 <table>
 <thead>
 <tr>
@@ -506,16 +504,16 @@
 </table>
 <p>Because all three of the other features were highly correlated with <strong>PCT_LACCESS_POP10</strong>, I dropped the other three. After that, I felt confident that I would be able to avoid the worst interferences of collinearity.</p>
 <p>Next, I took some time to explore our target variable before transformation into a binary variable. How indeed had the diabetes rates by county changed from 2008 to 2013?</p>
-<p><img alt="diabetes histogram" src="/images/diabetes_hist.png"></p>
+<p><img alt="diabetes histogram" src="https://calremmel.github.io/images/diabetes_hist.png"></p>
 <p>In this chart, the red line represents the <strong>11%</strong> cutoff for inclusion in the Diabetes Belt. We can see at a glance that many more counties qualify in 2013 than in 2008.</p>
 <p>So, where are these counties concentrated? I chose to approach this question first using a set of parallel boxplots.</p>
-<p><img alt="diabetes boxplots by state" src="/images/diabetes_boxplots.png"></p>
+<p><img alt="diabetes boxplots by state" src="https://calremmel.github.io/images/diabetes_boxplots.png"></p>
 <p>Again, the red line represents the <strong>11%</strong> Diabetes Belt cutoff. The US south and southeast are well represented above the line, while New England and the west are by and large in better shape.</p>
 <p>Finally, I transformed the target feature into binary categories for use in the classifier, and used them to create choropleth maps of the Diabetes Belt in 2008 and 2013 using geopandas and plotly.</p>
 <h2>The Diabetes Belt in 2008</h2>
-<p><img alt="map 2008" src="/images/map_2008.png"></p>
+<p><img alt="map 2008" src="https://calremmel.github.io/images/map_2008.png"></p>
 <h2>The Diabetes Belt in 2013</h2>
-<p><img alt="map 2013" src="/images/map_2013.png"></p>
+<p><img alt="map 2013" src="https://calremmel.github.io/images/map_2013.png"></p>
 <p>It is clear that the belt had expanded considerably from 2008 to 2013.</p>
 <h1>Feature Ranking<a name="feature"></a></h1>
 <p>In order to further narrow down the feature set and select only the most crucial factors, I used Random Forest to tank the features by gini index. This gave me a list of features sorted from the best contributing features to the worst.</p>
@@ -805,7 +803,7 @@
 </pre></div>
 
 
-<p><img alt="png" src="/images/output_10_1.png"></p>
+<p><img alt="png" src="https://calremmel.github.io/images/output_10_1.png"></p>
 <p>Having determined that the top seven features were likely to have the largest impact on the quality of the classifier that I wanted to build, I set out to isolate these features and explore their relationship to the target in greater depth.</p>
 <h2>Futher Exploration<a name="further"></a></h2>
 <p>So, what were these features that gave the most insight into diabetes risk?</p>
@@ -924,25 +922,25 @@
 </pre></div>
 
 
-<p><img alt="png" src="/images/output_16_0.png"></p>
+<p><img alt="png" src="https://calremmel.github.io/images/output_16_0.png"></p>
 <p>Here, the relationship is clear. The median county diabetes rate in the Belt is at least 5% greater than outside of it.</p>
 <div class="highlight"><pre><span></span><span class="n">boxplotter</span><span class="p">(</span><span class="n">access</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Food Access - No Belt vs. Belt&#39;</span><span class="p">)</span>
 </pre></div>
 
 
-<p><img alt="png" src="/images/output_18_0.png"></p>
+<p><img alt="png" src="https://calremmel.github.io/images/output_18_0.png"></p>
 <p>Clearly, household access to store is an important factor, with <strong>lower access overall in the belt.</strong> SNAP-authorized stores may be thought of here as a <strong>proxy for poverty</strong>, as it is likely that there are more such stores in impoverished areas.</p>
 <div class="highlight"><pre><span></span><span class="n">boxplotter</span><span class="p">(</span><span class="n">food_assist</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Food Assistance - No Belt vs. Belt&#39;</span><span class="p">)</span>
 </pre></div>
 
 
-<p><img alt="png" src="/images/output_20_0.png"></p>
+<p><img alt="png" src="https://calremmel.github.io/images/output_20_0.png"></p>
 <p>Again, these measures are probably best thought of as <strong>proxies for poverty,</strong> though it might take more domain knowledge to really know what is going on. Still, rates seem to be generally higher on the belt than off of it.</p>
 <div class="highlight"><pre><span></span><span class="n">boxplotter</span><span class="p">(</span><span class="n">race_age</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;Race &amp; Age - No Belt vs. Belt&quot;</span><span class="p">)</span>
 </pre></div>
 
 
-<p><img alt="png" src="/images/output_22_0.png"></p>
+<p><img alt="png" src="https://calremmel.github.io/images/output_22_0.png"></p>
 <p>Here, larger Hispanic populations were better represented off of the belt. Meanwhile, older populations were slightly better represented on the belt.</p>
 <h1>Building a Classifier<a name="building"></a></h1>
 <p>At this point, I felt comfortable taking a crack at developing a model. In order to do this, I built a pipeline to test four popular algorithms for classification:</p>
@@ -990,10 +988,10 @@
 
 
 <p>All four models did remarkably well. In order to get a clearer sense of what was going on, I produced boxplots of the individual scores from the kfold validation step.</p>
-<p><img alt="algorithm boxplots" src="/images/algorithm_comparison.png"></p>
+<p><img alt="algorithm boxplots" src="https://calremmel.github.io/images/algorithm_comparison.png"></p>
 <p>Surprisingly (to me), logistic regression performed the best overall of the four! Because it is a simple, fast algorithm that is robust against overfitting, and because the fact that it performed well probably means that the data is well-suited to what is essentially a linear approach, I felt comfortable selecting this as the final model with a <strong>mean accuracy of 80%.</strong></p>
 <p>Exploring the confusion matrix confirmed that the model was well-tuned for accuracy, with similar numbers of false positives and false negatives:</p>
-<p><img alt="logreg confusion matrix" src="/images/conf_logreg.png"></p>
+<p><img alt="logreg confusion matrix" src="https://calremmel.github.io/images/conf_logreg.png"></p>
 <h1>Wrap-Up<a name="wrap"></a></h1>
 <p>Given the wealth of data in the USDA's Food Environment Atlas, I have found that it is possible to construct a classifier that will determine whether a US county qualifies as a member of the CDC's Diabetes Belt with <strong>~80% accuracy</strong>.</p>
 <p>The top categories of features appear to be <strong>obesity, food access, food assistance, and race/age</strong>. Some of these may be proxies for the effect of <strong>poverty</strong>, rather than causes in of themselves, but to assess this would require domain expertise and the investment of greater material resources.</p>
