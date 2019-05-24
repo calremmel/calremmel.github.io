@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+          <title>Chris Remmel</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta charset="utf-8" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Chris Remmel Full Atom Feed" />
+        <link href="/feeds/dataviz.atom.xml" type="application/atom+xml" rel="alternate" title="Chris Remmel Categories Atom Feed" />
+        <!-- twitter card metadata -->
+<meta name="twitter:site" content="@chrisremmel">
+<meta name="twitter:title" content="Automatic activity tracking with Google Sheets, PeriodIndex, and matplotlib">
+<meta name="twitter:description" content="">
+        <!-- OG Tags -->
+<meta property="og:url" content="/activity-tracking.html"/>
+<meta property="og:title" content="Chris Remmel | Automatic activity tracking with Google Sheets, PeriodIndex, and matplotlib" />
+<meta property="og:description" content="" />
+        <!-- favicon -->
+        <!-- moment.js for date formatting -->
+        <script src="/theme/js/moment.js"></script>
+        <!-- css -->
+        <link rel="stylesheet" type="text/css" href="/theme/css/main.css" />
+		<script>
+			
+                /*! grunt-grunticon Stylesheet Loader - v2.1.2 | https://github.com/filamentgroup/grunticon | (c) 2015 Scott Jehl, Filament Group, Inc. | MIT license. */
+    
+    (function(e){function t(t,n,r,o){"use strict";function a(){for(var e,n=0;u.length>n;n++)u[n].href&&u[n].href.indexOf(t)>-1&&(e=!0);e?i.media=r||"all":setTimeout(a)}var i=e.document.createElement("link"),l=n||e.document.getElementsByTagName("script")[0],u=e.document.styleSheets;return i.rel="stylesheet",i.href=t,i.media="only x",i.onload=o||null,l.parentNode.insertBefore(i,l),a(),i}var n=function(r,o){"use strict";if(r&&3===r.length){var a=e.navigator,i=e.Image,l=!(!document.createElementNS||!document.createElementNS("http://www.w3.org/2000/svg","svg").createSVGRect||!document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#Image","1.1")||e.opera&&-1===a.userAgent.indexOf("Chrome")||-1!==a.userAgent.indexOf("Series40")),u=new i;u.onerror=function(){n.method="png",n.href=r[2],t(r[2])},u.onload=function(){var e=1===u.width&&1===u.height,a=r[e&&l?0:e?1:2];n.method=e&&l?"svg":e?"datapng":"png",n.href=a,t(a,null,null,o)},u.src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==",document.documentElement.className+=" grunticon"}};n.loadCSS=t,e.grunticon=n})(this);(function(e,t){"use strict";var n=t.document,r="grunticon:",o=function(e){if(n.attachEvent?"complete"===n.readyState:"loading"!==n.readyState)e();else{var t=!1;n.addEventListener("readystatechange",function(){t||(t=!0,e())},!1)}},a=function(e){return t.document.querySelector('link[href$="'+e+'"]')},c=function(e){var t,n,o,a,c,i,u={};if(t=e.sheet,!t)return u;n=t.cssRules?t.cssRules:t.rules;for(var l=0;n.length>l;l++)o=n[l].cssText,a=r+n[l].selectorText,c=o.split(");")[0].match(/US\-ASCII\,([^"']+)/),c&&c[1]&&(i=decodeURIComponent(c[1]),u[a]=i);return u},i=function(e){var t,o,a;o="data-grunticon-embed";for(var c in e)if(a=c.slice(r.length),t=n.querySelectorAll(a+"["+o+"]"),t.length)for(var i=0;t.length>i;i++)t[i].innerHTML=e[c],t[i].style.backgroundImage="none",t[i].removeAttribute(o);return t},u=function(t){"svg"===e.method&&o(function(){i(c(a(e.href))),"function"==typeof t&&t()})};e.embedIcons=i,e.getCSS=a,e.getIcons=c,e.ready=o,e.svgLoadedCallback=u,e.embedSVG=u})(grunticon,this);
+                
+                grunticon(["/theme/css/icons.data.svg.css", "/theme/css/icons.data.png.css", "/theme/css/icons.fallback.css"]);
+            </script>
+        <noscript><link href="/theme/css/icons.fallback.css" rel="stylesheet"></noscript>
+        <!-- menu toggle javascript -->
+        <script type="text/javascript">
+            document.addEventListener("DOMContentLoaded", initMenu);
+            
+            function initMenu(){
+                var menu = document.getElementById("menu");
+                var menulink = document.getElementById("menu-link");
+                menulink.addEventListener("click", function toggleMenu(){
+                        window.event.preventDefault();
+                        menulink.classList.toggle('active');
+                        menu.classList.toggle('active');              
+                    });
+            };
+        </script>
+
+
+
+</head>
+<body>
+    <div role="banner" id="masthead">
+        <header>
+            <h1><a href="/">Chris's Blog</a></h1>
+            <a href="#menu" id="menu-link">more stuff</a>
+            <nav id="menu">
+                <ul>
+                            <li class="active"><a href="/category/dataviz.html">dataviz</a></li>
+                            <li><a href="/category/fraud-detection.html">fraud-detection</a></li>
+                            <li><a href="/category/project.html">project</a></li>
+                </ul>
+            </nav>
+        </header>
+    </div>
+        <div class="page" role="main">
+  <div class="article" role="article">
+    <article>
+        <footer>
+            <a name="top"></a>
+            <p>
+              <time datetime=" 2019-04-29 00:00:00-04:00">
+                <script>document.write(moment('2019-04-29 00:00:00-04:00').format('LL'));</script>
+              </time>
+            </p>
+        </footer>
+        <header>
+          <h2>
+            Automatic activity tracking with Google Sheets, PeriodIndex, and matplotlib
+          </h2>
+        </header>
+      <div class="content">
+         <p>There's a lot to keep track of during the job search process, and last week I decided it would be nice to have an easy, automatic way to visualize my job search activity from week to week.</p>
+<p>I've been tracking my efforts using Google Sheets, and wanted to be able to get an updated visualization drawing directly from the online worksheet by running a script. After a morning of work, I found a solution that would allow me to use Google Sheets as a database, and get updated visualizations using Python and <code>matplotlib</code>.</p>
+<p>Here is the result!</p>
+<p><img alt="Job Search Image" src="/images/2019-04-26-report.png"></p>
+<p>If you would like to set up something similar for yourself, <em>read on.</em></p>
+<h2>Using Google Sheets as a Database</h2>
+<p>In order to use Google Sheets to track your activities you'll need:</p>
+<ol>
+<li>OAuth2 credentials from the Google Developers Console. <a href="">You may find a guide for this part by clicking here.</a></li>
+<li>The <code>gspread</code> library in order to get the updated activity tracking worksheet from Google Sheets as a pandas DataFrame</li>
+</ol>
+<p>To follow along with this example, the tracking sheet itself is only required to have two columns:</p>
+<ul>
+<li><code>Date</code> - the date the job search activity took place</li>
+<li><code>Action</code> - the kind of action taken</li>
+</ul>
+<h2>Importing Libraries</h2>
+<p>This first code cell imports the necessary libraries, including <code>datetime</code> which we will need in order to automatically timestamp our plot's filename, and sets the global style for the final plot.</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">gspread</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+
+<span class="kn">from</span> <span class="nn">oauth2client.service_account</span> <span class="kn">import</span> <span class="n">ServiceAccountCredentials</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;seaborn&#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<h2>Connecting to Google Sheets</h2>
+<p>This cell connects to the Google Drive API using the <code>gspread</code> Client object. <code>activity_sheet</code> contains the exact name of the worksheet that contains the <code>Date</code> and <code>Action</code> columns.</p>
+<div class="highlight"><pre><span></span><span class="n">scope</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;https://spreadsheets.google.com/feeds&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;https://www.googleapis.com/auth/drive&#39;</span><span class="p">]</span>
+<span class="n">creds</span> <span class="o">=</span> <span class="n">ServiceAccountCredentials</span><span class="o">.</span><span class="n">from_json_keyfile_name</span><span class="p">(</span><span class="s1">&#39;../data/job_search_creds.json&#39;</span><span class="p">,</span> <span class="n">scope</span><span class="p">)</span>
+<span class="n">gc</span> <span class="o">=</span> <span class="n">gspread</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="n">creds</span><span class="p">)</span>
+<span class="n">activity_sheet</span> <span class="o">=</span> <span class="s2">&quot;Name of Activity Tracking Sheet&quot;</span>
+</pre></div>
+
+
+<h2>Retrieving Activity Worksheet</h2>
+<p>This function uses the <code>gspread</code> Client to retrieve the activity worksheet and converts it into a pandas DataFrame.</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_activity</span><span class="p">(</span><span class="n">gc</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns worksheet from connected workbook.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        gc (Client): gspread client object</span>
+<span class="sd">        worksheet (str): Name of worksheet</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        df (DataFrame): Worksheet as pandas DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">book</span> <span class="o">=</span> <span class="n">gc</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">job_search</span> <span class="o">=</span> <span class="n">book</span><span class="o">.</span><span class="n">get_worksheet</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">js_vals</span> <span class="o">=</span> <span class="n">job_search</span><span class="o">.</span><span class="n">get_all_values</span><span class="p">()</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">js_vals</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">columns</span><span class="o">=</span><span class="n">js_vals</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">df</span>
+</pre></div>
+
+
+<h2>Using a Period Index</h2>
+<p>This function does a few important things that bear some explanation:</p>
+<ol>
+<li>It converts the <code>Date</code> column to the <code>datetime</code> data type, and sets it as the index of the DataFrame</li>
+<li>It then converts the the <code>DatetimeIndex</code> to a <a href="https://pandas.pydata.org/pandas-docs/version/0.23.4/generated/pandas.PeriodIndex.html">PeriodIndex</a>, which allows us to group our actions by week rather than by individual day when we pass in <code>freq="W"</code></li>
+<li>It converts our <code>Action</code> column into dummy variables for each category of action, and then sums the counts of each category by week</li>
+</ol>
+<p>The nice thing about building the function this way, is that if you add a new kind of action -- say you decide you want to start tracking <code>Blog Post</code> as a category so you know how many posts you publish weekly -- this will automatically update without you having to write any new code.</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_weekly_counts</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">dates</span><span class="o">=</span><span class="s2">&quot;Date&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Gets weekly counts of categorical column in DataFrame containing a column of dates.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        df (DataFrame): DataFrame containing target and date columns</span>
+<span class="sd">        target (str): Column containing categories to be counted</span>
+<span class="sd">        dates (str): Column of dates</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        counts (DataFrame): DataFrame of weekly counts</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">Date</span><span class="p">))</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;Date&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">weekly</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">to_period</span><span class="p">(</span><span class="n">freq</span><span class="o">=</span><span class="s2">&quot;W&quot;</span><span class="p">)</span>
+    <span class="n">actions</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">get_dummies</span><span class="p">(</span><span class="n">weekly</span><span class="p">[</span><span class="n">target</span><span class="p">])</span>
+    <span class="n">counts</span> <span class="o">=</span> <span class="n">actions</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">actions</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">counts</span>
+</pre></div>
+
+
+<p>The returned <code>counts</code> DataFrame ends up looking like this:</p>
+<p><img alt="Counts Example" src="/images/counts-example.PNG"></p>
+<h2>Making the Plot</h2>
+<p>At long last, we are ready to produce and save the final plot. We make the stacked area plot using the <code>.plot.area()</code> pandas DataFrame method, and then customize it using <code>matplotlib</code>.</p>
+<p>Thanks to <code>datetime.datetime.now()</code>, we have an automatic naming scheme for our saved files, which both keeps us from overwriting past plots and makes it easy to see in-folder how things have progressed over time.</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_report</span><span class="p">(</span><span class="n">counts</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plots job search activity and saves .png to reports folder.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        counts (DataFrame): DataFrame of activity counts by period</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Get current date for filename</span>
+    <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="n">time_string</span> <span class="o">=</span> <span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">counts</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">area</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Job Search Dashboard&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;# Actions Taken&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Week&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="c1"># These next two lines mark when I personally started my job search</span>
+    <span class="c1"># You can remove them without consequence</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="s1">&#39;4/1/2019&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="s1">&#39;4/1/2019&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;  Job search start&quot;</span><span class="p">,</span> <span class="n">fontdict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;size&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">})</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;../reports/{}-report.png&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">time_string</span><span class="p">))</span>
+    <span class="k">pass</span>
+</pre></div>
+
+
+<h2>Calling the Functions</h2>
+<p>Thanks to our hard work from earlier, all we need to do to generate a new plot which automatically incorporates any changes we've made to our Google Sheet is run the following three lines of code:</p>
+<div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">get_activity</span><span class="p">(</span><span class="n">gc</span><span class="p">,</span> <span class="n">activity_sheet</span><span class="p">)</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="n">get_weekly_counts</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s2">&quot;Action&quot;</span><span class="p">)</span>
+<span class="n">plot_report</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span>
+</pre></div>
+
+
+<p><img alt="Job Search Image" src="/images/2019-04-26-report.png"></p>
+<h2>Celebration Time</h2>
+<p>And there you have it! A nice plot that displays weekly activity counts, drawing updates from Google Sheets. This workflow can be used to make any kind of plot using Google Sheets as a kind of lightweight database. Experiment, edit, and enjoy!</p>
+      </div>
+      <div class="back-to-top">
+          <a href="#top">back to top</a>
+      </div>
+    </article>
+  </div>
+<!-- end article -->
+                <footer>
+                    <div class="icons">
+                        <a href="https://twitter.com/chrisremmel" target="_blank"><div class="icon-twitter icon"></div></a>
+                        <a href="https://github.com/calremmel" target="_blank"><div class="icon-github icon"></div></a>
+                    </div>
+                    <p>© <script>document.write(moment().format('YYYY'));</script> Chris Remmel</p>
+                </footer>
+        </div>
+</body>
+</html>
