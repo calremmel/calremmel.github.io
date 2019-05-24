@@ -3,6 +3,8 @@ slug: human-readable-eda-python
 category: dataviz
 date: 2019-05-24
 
+![jpg]({static}/images/TidyPipe.jpg)
+
 # Why Pipes are Great
 
 I've been working with a team whose computational work is done primarily in R. Python is my primary language and I remain much more comfortable with its scientific stack of tools, but as I've gotten to know `ggplot2` and the `tidyverse` ecosystem of tools in R, I've been finding myself wishing that I could come up with something a little closer to that workflow in Python.
