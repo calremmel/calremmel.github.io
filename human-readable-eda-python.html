@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+          <title>Chris Remmel</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta charset="utf-8" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Chris Remmel Full Atom Feed" />
+        <link href="/feeds/dataviz.atom.xml" type="application/atom+xml" rel="alternate" title="Chris Remmel Categories Atom Feed" />
+        <!-- twitter card metadata -->
+<meta name="twitter:site" content="@chrisremmel">
+<meta name="twitter:title" content="Human Readable EDA in Python">
+<meta name="twitter:description" content="">
+        <!-- OG Tags -->
+<meta property="og:url" content="/human-readable-eda-python.html"/>
+<meta property="og:title" content="Chris Remmel | Human Readable EDA in Python" />
+<meta property="og:description" content="" />
+        <!-- favicon -->
+        <!-- moment.js for date formatting -->
+        <script src="/theme/js/moment.js"></script>
+        <!-- css -->
+        <link rel="stylesheet" type="text/css" href="/theme/css/main.css" />
+		<script>
+			
+                /*! grunt-grunticon Stylesheet Loader - v2.1.2 | https://github.com/filamentgroup/grunticon | (c) 2015 Scott Jehl, Filament Group, Inc. | MIT license. */
+    
+    (function(e){function t(t,n,r,o){"use strict";function a(){for(var e,n=0;u.length>n;n++)u[n].href&&u[n].href.indexOf(t)>-1&&(e=!0);e?i.media=r||"all":setTimeout(a)}var i=e.document.createElement("link"),l=n||e.document.getElementsByTagName("script")[0],u=e.document.styleSheets;return i.rel="stylesheet",i.href=t,i.media="only x",i.onload=o||null,l.parentNode.insertBefore(i,l),a(),i}var n=function(r,o){"use strict";if(r&&3===r.length){var a=e.navigator,i=e.Image,l=!(!document.createElementNS||!document.createElementNS("http://www.w3.org/2000/svg","svg").createSVGRect||!document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#Image","1.1")||e.opera&&-1===a.userAgent.indexOf("Chrome")||-1!==a.userAgent.indexOf("Series40")),u=new i;u.onerror=function(){n.method="png",n.href=r[2],t(r[2])},u.onload=function(){var e=1===u.width&&1===u.height,a=r[e&&l?0:e?1:2];n.method=e&&l?"svg":e?"datapng":"png",n.href=a,t(a,null,null,o)},u.src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==",document.documentElement.className+=" grunticon"}};n.loadCSS=t,e.grunticon=n})(this);(function(e,t){"use strict";var n=t.document,r="grunticon:",o=function(e){if(n.attachEvent?"complete"===n.readyState:"loading"!==n.readyState)e();else{var t=!1;n.addEventListener("readystatechange",function(){t||(t=!0,e())},!1)}},a=function(e){return t.document.querySelector('link[href$="'+e+'"]')},c=function(e){var t,n,o,a,c,i,u={};if(t=e.sheet,!t)return u;n=t.cssRules?t.cssRules:t.rules;for(var l=0;n.length>l;l++)o=n[l].cssText,a=r+n[l].selectorText,c=o.split(");")[0].match(/US\-ASCII\,([^"']+)/),c&&c[1]&&(i=decodeURIComponent(c[1]),u[a]=i);return u},i=function(e){var t,o,a;o="data-grunticon-embed";for(var c in e)if(a=c.slice(r.length),t=n.querySelectorAll(a+"["+o+"]"),t.length)for(var i=0;t.length>i;i++)t[i].innerHTML=e[c],t[i].style.backgroundImage="none",t[i].removeAttribute(o);return t},u=function(t){"svg"===e.method&&o(function(){i(c(a(e.href))),"function"==typeof t&&t()})};e.embedIcons=i,e.getCSS=a,e.getIcons=c,e.ready=o,e.svgLoadedCallback=u,e.embedSVG=u})(grunticon,this);
+                
+                grunticon(["/theme/css/icons.data.svg.css", "/theme/css/icons.data.png.css", "/theme/css/icons.fallback.css"]);
+            </script>
+        <noscript><link href="/theme/css/icons.fallback.css" rel="stylesheet"></noscript>
+        <!-- menu toggle javascript -->
+        <script type="text/javascript">
+            document.addEventListener("DOMContentLoaded", initMenu);
+            
+            function initMenu(){
+                var menu = document.getElementById("menu");
+                var menulink = document.getElementById("menu-link");
+                menulink.addEventListener("click", function toggleMenu(){
+                        window.event.preventDefault();
+                        menulink.classList.toggle('active');
+                        menu.classList.toggle('active');              
+                    });
+            };
+        </script>
+
+
+
+</head>
+<body>
+    <div role="banner" id="masthead">
+        <header>
+            <h1><a href="/">Chris's Blog</a></h1>
+            <a href="#menu" id="menu-link">more stuff</a>
+            <nav id="menu">
+                <ul>
+                            <li class="active"><a href="/category/dataviz.html">dataviz</a></li>
+                            <li><a href="/category/fraud-detection.html">fraud-detection</a></li>
+                            <li><a href="/category/project.html">project</a></li>
+                </ul>
+            </nav>
+        </header>
+    </div>
+        <div class="page" role="main">
+  <div class="article" role="article">
+    <article>
+        <footer>
+            <a name="top"></a>
+            <p>
+              <time datetime=" 2019-05-24 00:00:00-04:00">
+                <script>document.write(moment('2019-05-24 00:00:00-04:00').format('LL'));</script>
+              </time>
+            </p>
+        </footer>
+        <header>
+          <h2>
+            Human Readable EDA in Python
+          </h2>
+        </header>
+      <div class="content">
+         <h1>Why Pipes are Great</h1>
+<p>I've been working with a team whose computational work is done primarily in R. Python is my primary language and I remain much more comfortable with its scientific stack of tools, but as I've gotten to know <code>ggplot2</code> and the <code>tidyverse</code> ecosystem of tools in R, I've been finding myself wishing that I could come up with something a little closer to that workflow in Python.</p>
+<p>One of the major things I like about how code is written within the <code>tidyverse</code> is the central importance of the pipe command: <code>%&gt;%</code>. In R, just about every transformation you want to apply to data is going to be done through a function. If you want to apply many transformations, this can quickly lead to lots of nested functions, which can be cumbersome to read and unpleasant to edit -- unless you love counting parenthesis!</p>
+<p>The beauty of the pipe is that it takes the output of its line and passes it as the first argument into the function that appears on the next line of code. By way of example, let's say you have a DataFrame <code>finances</code> with columns <code>year</code> and <code>revenue</code>, and you want to get the total revenue for each year after 2008. Without the pipe, that code might look like this:</p>
+<div class="highlight"><pre><span></span><span class="nf">summarize</span><span class="p">(</span><span class="nf">group_by</span><span class="p">(</span><span class="nf">filter</span><span class="p">(</span><span class="n">finances</span><span class="p">,</span> <span class="n">year</span> <span class="o">&gt;</span> <span class="m">2008</span><span class="p">),</span> <span class="n">year</span><span class="p">),</span> <span class="n">totalRevenue</span> <span class="o">=</span> <span class="nf">sum</span><span class="p">(</span><span class="n">revenue</span><span class="p">))</span>
+</pre></div>
+
+
+<p>I'd like to emphasize that while this code will run, nobody would ever write it like this. This is only by way of example.</p>
+<p>With the pipe, this becomes much more human readable:</p>
+<div class="highlight"><pre><span></span><span class="n">finances</span> <span class="o">%&gt;%</span>
+  <span class="nf">filter</span><span class="p">(</span><span class="n">year</span> <span class="o">&gt;</span> <span class="m">2008</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="nf">group_by</span><span class="p">(</span><span class="n">year</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="nf">summarize</span><span class="p">(</span><span class="n">totalRevenue</span> <span class="o">=</span> <span class="nf">sum</span><span class="p">(</span><span class="n">revenue</span><span class="p">))</span>
+</pre></div>
+
+
+<p>The syntax for <code>ggplot2</code> does not use the pipe, but it uses a similar "one operation on one line" design philosophy that makes it easy to iterate and try adding and removing different visual elements.</p>
+<p>Let's say we've saved the result of the previous operation as a new DataFrame called <code>revenue_by_year</code>. We would make our chart with the following syntax:</p>
+<div class="highlight"><pre><span></span><span class="nf">ggplot</span><span class="p">(</span><span class="n">revenue_by_year</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">aes</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">totalRevenue</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">geom_col</span><span class="p">()</span>
+</pre></div>
+
+
+<p>If we wanted to flip the orientation, for example, we would need nothing more than add in a line saying so:</p>
+<div class="highlight"><pre><span></span><span class="nf">ggplot</span><span class="p">(</span><span class="n">revenue_by_year</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">aes</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">totalRevenue</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">geom_col</span><span class="p">()</span> <span class="o">+</span>
+  <span class="nf">coord_flip</span><span class="p">()</span>
+</pre></div>
+
+
+<p>Nice, huh? Finally, if you wanted, you could do all of this in one step using the pipe to pass the summary directly into the <code>ggplot</code> function. Thanks to the stepwise design philosophy of the <code>tidyverse</code>, it remains readable despite the length.</p>
+<div class="highlight"><pre><span></span><span class="n">finances</span> <span class="o">%&gt;%</span>
+  <span class="nf">filter</span><span class="p">(</span><span class="n">year</span> <span class="o">&gt;</span> <span class="m">2008</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="nf">group_by</span><span class="p">(</span><span class="n">year</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="nf">summarize</span><span class="p">(</span><span class="n">totalRevenue</span> <span class="o">=</span> <span class="nf">sum</span><span class="p">(</span><span class="n">revenue</span><span class="p">))</span> <span class="o">%&gt;%</span>
+  <span class="nf">ggplot</span><span class="p">()</span> <span class="o">+</span>
+    <span class="nf">aes</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">totalRevenue</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">geom_col</span><span class="p">()</span> <span class="o">+</span>
+    <span class="nf">coord_flip</span><span class="p">()</span>
+</pre></div>
+
+
+<h2>Human Readable EDA with Pandas</h2>
+<p><code>Pandas</code> is a wonderful library for data wrangling and exploration, and includes some great tools for making quick exploratory charts. It doesn't generally have the nested functions issue that we encountered in R code, but it does have another readability challenge: method chaining.</p>
+<p>In order to recreate the same summary in Python using <code>Pandas</code>, we would need to chain a couple of methods, like this:</p>
+<div class="highlight"><pre><span></span><span class="n">finances</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">finances</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">2008</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;year&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="s2">&quot;year&quot;</span><span class="p">,</span> <span class="s2">&quot;totalRevenue&quot;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>This is not ideal for readability. It is better than nesting, as at least the operations are in the same order in which they take place. Still, this is a very long line.</p>
+<p>One solution to this is the backslash, which breaks up lines. With that, we could get a <code>tidyverse</code> feel by manually indenting each line like so.</p>
+<div class="highlight"><pre><span></span><span class="n">finances</span> \ 
+    <span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">finances</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">2008</span><span class="p">]</span> \
+    <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;year&quot;</span><span class="p">)</span> \
+    <span class="o">.</span><span class="n">sum</span><span class="p">()</span> \
+    <span class="o">.</span><span class="n">reset_index</span><span class="p">()</span> \
+    <span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="s2">&quot;year&quot;</span><span class="p">,</span> <span class="s2">&quot;totalRevenue&quot;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>I don't know about you, but something about this just doesn't feel right. Does PEP8 have something to say?</p>
+<p><em>It does.</em></p>
+<div class="highlight"><pre><span></span>The preferred way of wrapping long lines is by using Python&#39;s implied line continuation inside parentheses, brackets and braces. Long lines can be broken over multiple lines by wrapping expressions in parentheses. These should be used in preference to using a backslash for line continuation.
+</pre></div>
+
+
+<p>It was news to me that parenthesis had this property in Python! This solves our problem entirely, and has the added bonus of taking care of indentation. Our code becomes this:</p>
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="n">finances</span>
+ <span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">finances</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">2008</span><span class="p">]</span>
+ <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;year&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+ <span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+ <span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="s2">&quot;year&quot;</span><span class="p">,</span> <span class="s2">&quot;totalRevenue&quot;</span><span class="p">))</span>
+</pre></div>
+
+
+<h1>But Where are the Plots?</h1>
+<p>To make this all a little less abstract, here's an example of this workflow using the New Hampshire State Budget.</p>
+<p>I wanted to plot the median expense for every government agency, in order. There were two major outliers, so I wanted to plot those separately. Here is the code, followed by the output:</p>
+<div class="highlight"><pre><span></span><span class="c1"># Get median expense by government agency.</span>
+<span class="n">fy_2018_expense_medians</span> <span class="o">=</span> <span class="n">fy_2018_expenses</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;agency_name&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">median</span><span class="p">()</span>
+<span class="c1"># Filter outliers and create bar chart.</span>
+<span class="p">(</span><span class="n">fy_2018_expense_medians</span>
+ <span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;fy_2018_actual_expense&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+ <span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">fy_2018_expense_medians</span><span class="o">.</span><span class="n">fy_2018_actual_expense</span> <span class="o">&lt;</span> <span class="mi">40000000</span><span class="p">,</span> <span class="s2">&quot;fy_2018_actual_expense&quot;</span><span class="p">]</span>
+ <span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span>
+     <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">7</span><span class="p">),</span> 
+     <span class="n">grid</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> 
+     <span class="n">title</span><span class="o">=</span><span class="s2">&quot;FY18 Median Expense by Government Agency&quot;</span>
+ <span class="p">))</span>
+<span class="c1"># Set axis labels.</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Agency Name&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Median Expense in Dollars&quot;</span><span class="p">)</span>
+</pre></div>
+
+
+<p><img alt="png" src="/images/median_no_outliers.png"></p>
+<p>You will notice that I saved the aggregation as a separate DataFrame before plotting. This is because in order to filter by rows in <code>Pandas</code>, I needed to refer to a an actual DataFrame, whereas in R you are able to refer to the dynamically created summary column immediately. Still, this is a small sacrifice.</p>
+<p>In order to plot the outliers, all I needed to do was take that same code and make a few small alterations:
+1. Flip the comparison operator from <code>&lt;</code> to <code>&gt;=</code> in the <code>.loc</code> method
+2. Switch <code>.bar</code> to <code>.barh</code>
+3. Tweak the size a bit
+4. Change the labels</p>
+<div class="highlight"><pre><span></span><span class="c1"># Select only outliers and create bar chart.</span>
+<span class="p">(</span><span class="n">fy_2018_expense_medians</span>
+ <span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;fy_2018_actual_expense&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+ <span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">fy_2018_expense_medians</span><span class="o">.</span><span class="n">fy_2018_actual_expense</span> <span class="o">&gt;=</span> <span class="mi">40000000</span><span class="p">,</span> <span class="s2">&quot;fy_2018_actual_expense&quot;</span><span class="p">]</span>
+ <span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span>
+     <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> 
+     <span class="n">grid</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> 
+     <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Median Expense by Government Agency&quot;</span>
+ <span class="p">))</span>
+<span class="c1"># Set axis labels.</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;FY18 Median Expense in Tens of Millions&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Agency Name&quot;</span><span class="p">)</span>
+</pre></div>
+
+
+<p><img alt="png" src="/images/median_top_two.png"></p>
+<h1>Conclusion</h1>
+<p>The <code>tidyverse</code> workflow offers a powerful human readable workflow for EDA. Using parenthesis (and backslashes sparingly), we can achieve some of the same flexibility in Python using <code>Pandas</code>.</p>
+      </div>
+      <div class="back-to-top">
+          <a href="#top">back to top</a>
+      </div>
+    </article>
+  </div>
+<!-- end article -->
+                <footer>
+                    <div class="icons">
+                        <a href="https://twitter.com/chrisremmel" target="_blank"><div class="icon-twitter icon"></div></a>
+                        <a href="https://github.com/calremmel" target="_blank"><div class="icon-github icon"></div></a>
+                    </div>
+                    <p>© <script>document.write(moment().format('YYYY'));</script> Chris Remmel</p>
+                </footer>
+        </div>
+</body>
+</html>
